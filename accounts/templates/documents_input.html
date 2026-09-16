@@ -1,0 +1,482 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение документов для доступа к курсам</title>
+    <link rel="stylesheet" href="{%static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/document_input.css'%}">
+    <link rel="stylesheet" href="{% static 'css/header.css'%}">
+
+</head>
+
+{% include 'includes/header_acc.html' %}
+
+<body>
+
+    
+
+    <div class="container">
+        <div class="header">
+            <h1>Доступ к образовательным курсам</h1>
+            <p>Загрузите необходимые документы для подтверждения вашей квалификации</p>
+        </div>
+
+
+        {% if status == 'pending' %}
+            <div class="confirmation-message show">
+                <div class="checkmark">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3>Заявка отправлена</h3>
+                <p>
+                    Ваши документы находятся на проверке администратором.
+                    Пожалуйста, ожидайте завершения проверки.
+                </p>
+                <div class="status-note">
+                    <i class="fas fa-hourglass-half"></i>
+                    <span>Статус: Ожидает проверки</span>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if status == 'approved' %}
+            <div class="confirmation-message show">
+                <div class="checkmark">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h3>Документы подтверждены</h3>
+                <p>
+                    Ваши документы успешно проверены.
+                    Доступ к покупке курсов открыт.
+                </p>
+                <div class="status-note">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Статус: Проверено</span>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if status == 'rejected' %}
+            <div class="confirmation-message show" style="border-color:#e57373;background:#fff0f0;">
+                <div class="checkmark" style="background:#e57373;">
+                    <i class="fas fa-times"></i>
+                </div>
+                <h3>Документы отклонены</h3>
+                <p>
+                    К сожалению, ваши документы были отклонены.
+                    Пожалуйста, загрузите корректные документы повторно.
+                </p>
+                <div class="status-note" style="background:#f8d7da;color:#721c24;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Статус: Отклонено</span>
+                </div>
+            </div>
+        {% endif %}
+
+        
+        {% if status != 'pending'%}
+        <div class="form-container">
+            
+            <div class="requirement-note">
+                <h3><i class="fas fa-exclamation-circle"></i> Требование к документам</h3>
+                <p>Для доступа к покупке курсов необходимо подтвердить свое образование. Пожалуйста, загрузите сканы или фотографии следующих документов в форматах PDF, JPG или PNG (максимальный размер каждого файла - 10 МБ).</p>
+            </div>
+            
+            <form id="documents-form" method="POST" action="{%url 'documents_input_view' id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="upload-section">
+                    <h3 class="upload-title"><i class="fas fa-graduation-cap"></i> Документы об образовании</h3>
+                    
+                    <div class="file-upload">
+                        <input type="file" id="diploma"  name="diploma" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <label for="diploma" class="file-label">
+                            <div class="file-info">
+                                <div class="file-name">Диплом об образовании</div>
+                                <div class="file-desc">Загрузите скан или фото диплома о высшем или среднем специальном образовании</div>
+                                <div class="file-requirements">Форматы: PDF, JPG, PNG. Макс. размер: 10 МБ</div>
+                            </div>
+                            <div class="browse-btn">Выбрать файл</div>
+                        </label>
+                        <div class="file-preview" id="diploma-preview"></div>
+                    </div>
+                </div>
+                
+                <div class="upload-section">
+                    <h3 class="upload-title"><i class="fas fa-id-card"></i> Удостоверение личности</h3>
+                    
+                    <div class="file-upload">
+                        <input type="file" id="passport-main" name="passport_main" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <label for="passport-main" class="file-label">
+                            <div class="file-info">
+                                <div class="file-name">Паспорт (фото)</div>
+                                <div class="file-desc">Страницы паспорта с фото и основными данными</div>
+                                <div class="file-requirements">Форматы: PDF, JPG, PNG. Макс. размер: 10 МБ</div>
+                            </div>
+                            <div class="browse-btn">Выбрать файл</div>
+                        </label>
+                        <div class="file-preview" id="passport-main-preview"></div>
+                    </div>
+                    
+                    <div class="file-upload">
+                        <input type="file" id="passport-registration" name="passport_registration" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <label for="passport-registration" class="file-label">
+                            <div class="file-info">
+                                <div class="file-name">Паспорт (прописка)</div>
+                                <div class="file-desc">Страница паспорта с регистрацией по месту жительства</div>
+                                <div class="file-requirements">Форматы: PDF, JPG, PNG. Макс. размер: 10 МБ</div>
+                            </div>
+                            <div class="browse-btn">Выбрать файл</div>
+                        </label>
+                        <div class="file-preview" id="passport-registration-preview"></div>
+                    </div>
+                </div>
+                
+                <div class="upload-section">
+                    <h3 class="upload-title"><i class="fas fa-file-medical"></i> Прочие документы</h3>
+                    
+                    <div class="file-upload">
+                        <input type="file" id="snils" name="snils" accept=".pdf,.jpg,.jpeg,.png" required>
+                        <label for="snils" class="file-label">
+                            <div class="file-info">
+                                <div class="file-name">СНИЛС</div>
+                                <div class="file-desc">Страховое свидетельство обязательного пенсионного страхования</div>
+                                <div class="file-requirements">Форматы: PDF, JPG, PNG. Макс. размер: 10 МБ</div>
+                            </div>
+                            <div class="browse-btn">Выбрать файл</div>
+                        </label>
+                        <div class="file-preview" id="snils-preview"></div>
+                    </div>
+                </div>
+                
+                <div id="agree-div">
+                    <input type="checkbox" id="agree" required>
+                    <label id ="agree-label" for="agree">
+                        Я соглашаюсь на обработку персональных данных в соответствии с 
+                        <a href="/privacy/">Политикой конфиденциальности</a>
+                    </label>
+                </div>
+        
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Отправить документы на проверку
+                </button>
+            </form>
+            
+            <div class="confirmation-message" id="confirmation-message">
+                <div class="checkmark">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h3>Документы успешно отправлены!</h3>
+                <p>Ваши документы приняты в обработку. Пожалуйста, ожидайте проверки администратором. Обычно проверка занимает от 1 до 3 рабочих дней. После подтверждения документов вы получите полный доступ к покупке курсов на нашей платформе.</p>
+                <div class="status-note">
+                    <i class="fas fa-clock"></i>
+                    <span>Ваша заявка будет проверена администратором</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="footer-logo-text">
+                        Школа практической психологии и медиации
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <a href="/privacy/">Политика конфиденциальности</a>
+                    <a href="/agreement/">Пользовательское соглашение</a>
+                    <a href="/docs/">Документы</a>
+                </div>
+                
+                <div class="footer-contact">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <span>+7 (495) 123-45-67</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <span>info@psihotera.ru</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2025 «Школа практической психологии и медиации». Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('documents-form');
+
+    // Инициализация индикаторов файлов
+    initFileIndicators();
+
+    if (form) {
+        form.addEventListener('submit', function (e) {
+
+            let allFilesValid = true;
+            const fileInputs = form.querySelectorAll('input[type="file"][required]');
+
+            fileInputs.forEach(input => {
+                if (!input.files || input.files.length === 0) {
+                    allFilesValid = false;
+                    highlightRequiredField(input);
+                } else if (input.files[0].size > 10 * 1024 * 1024) {
+                    alert(`Файл "${input.files[0].name}" превышает максимальный размер 10 МБ`);
+                    allFilesValid = false;
+                }
+            });
+
+            if (!allFilesValid) {
+                e.preventDefault();
+                alert('Пожалуйста, загрузите все обязательные документы (максимум 10 МБ каждый)');
+                return;
+            }
+
+            const submitBtn = form.querySelector('.submit-btn');
+
+            if (submitBtn) {
+                submitBtn.innerHTML =
+                    '<i class="fas fa-spinner fa-spin"></i> Отправка...';
+                submitBtn.disabled = true;
+            }
+
+            // Ничего больше не делаем.
+            // Браузер сам отправит обычный POST запрос.
+        });
+    }
+
+
+    const status = "{{ status|default:'' }}";
+
+    if (status === 'pending' || status === 'approved') {
+        if (form) {
+            form.style.display = 'none';
+        }
+    } else if (status === 'rejected') {
+
+        const rejectedNote = document.createElement('div');
+
+        rejectedNote.className = 'requirement-note';
+
+        rejectedNote.innerHTML = `
+            <h3>
+                <i class="fas fa-exclamation-triangle"></i>
+                Требуется повторная загрузка
+            </h3>
+            <p>
+                Ваши предыдущие документы были отклонены.
+                Пожалуйста, загрузите корректные документы повторно.
+            </p>
+        `;
+
+        if (form) {
+            form.insertBefore(rejectedNote, form.firstChild);
+        }
+    }
+
+
+
+    function initFileIndicators() {
+
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+
+        fileInputs.forEach(input => {
+
+            const container = input.closest('.file-upload');
+            const label = container.querySelector('.file-label');
+            const browseBtn = container.querySelector('.browse-btn');
+
+
+            const indicator = document.createElement('div');
+
+            indicator.className = 'file-indicator';
+            indicator.id = `${input.id}-indicator`;
+
+            indicator.innerHTML = `
+                <i class="fas fa-file-upload"></i>
+                <div class="file-info">
+                    <div class="file-name">Файл не выбран</div>
+                    <div class="file-size"></div>
+                </div>
+                <button type="button" class="file-remove" title="Удалить файл">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            container.appendChild(indicator);
+
+
+            input.addEventListener('change', function () {
+
+                const file = this.files[0];
+
+                if (file) {
+
+                    updateFileIndicator(this, file);
+
+                    label.classList.add('has-file');
+
+                    browseBtn.textContent = 'Изменить файл';
+                    browseBtn.classList.add('has-file');
+
+                } else {
+
+                    resetFileIndicator(this);
+
+                    label.classList.remove('has-file');
+
+                    browseBtn.textContent = 'Выбрать файл';
+                    browseBtn.classList.remove('has-file');
+
+                }
+            });
+
+
+            indicator.querySelector('.file-remove')
+                .addEventListener('click', function (e) {
+
+                    e.preventDefault();
+
+                    input.value = '';
+
+                    resetFileIndicator(input);
+
+                    label.classList.remove('has-file');
+
+                    browseBtn.textContent = 'Выбрать файл';
+                    browseBtn.classList.remove('has-file');
+
+                });
+
+        });
+    }
+
+
+
+    function updateFileIndicator(input, file) {
+
+        const indicator = document.getElementById(`${input.id}-indicator`);
+
+        const fileName = file.name.length > 30 ?
+            file.name.substring(0, 27) + '...' :
+            file.name;
+
+
+        indicator.querySelector('.file-name').textContent = fileName;
+
+        indicator.querySelector('.file-size').textContent =
+            formatFileSize(file.size);
+
+
+        indicator.classList.add('show');
+
+
+        const icon = indicator.querySelector('i');
+
+
+        if (file.type.includes('pdf')) {
+
+            icon.className = 'fas fa-file-pdf';
+            icon.style.color = '#f44336';
+
+        } else if (file.type.includes('image')) {
+
+            icon.className = 'fas fa-file-image';
+            icon.style.color = '#4caf50';
+
+        } else {
+
+            icon.className = 'fas fa-file';
+            icon.style.color = '#2196f3';
+
+        }
+    }
+
+
+
+    function resetFileIndicator(input) {
+
+        const indicator =
+            document.getElementById(`${input.id}-indicator`);
+
+
+        indicator.querySelector('.file-name').textContent =
+            'Файл не выбран';
+
+
+        indicator.querySelector('.file-size').textContent = '';
+
+        indicator.classList.remove('show');
+
+        indicator.querySelector('i').className =
+            'fas fa-file-upload';
+
+        indicator.querySelector('i').style.color = '';
+
+    }
+
+
+
+    function formatFileSize(bytes) {
+
+        if (bytes === 0) return '0 Байт';
+
+        const k = 1024;
+
+        const sizes = [
+            'Байт',
+            'КБ',
+            'МБ',
+            'ГБ'
+        ];
+
+        const i = Math.floor(
+            Math.log(bytes) / Math.log(k)
+        );
+
+
+        return parseFloat(
+            (bytes / Math.pow(k, i)).toFixed(2)
+        ) + ' ' + sizes[i];
+
+    }
+
+
+
+    function highlightRequiredField(input) {
+
+        const label =
+            input.closest('.file-upload')
+            .querySelector('.file-label');
+
+
+        label.style.borderColor = '#f44336';
+
+        label.style.backgroundColor = '#ffebee';
+
+
+        setTimeout(() => {
+
+            label.style.borderColor = '';
+
+            label.style.backgroundColor = '';
+
+        }, 2000);
+
+    }
+
+});
+</script>
+</body>
+</html>

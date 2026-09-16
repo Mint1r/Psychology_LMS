@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Школа практической психологии и медиации</title>
+    <link rel="stylesheet" href="{%static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css'%}">
+    <link rel="stylesheet" href="{% static 'css/footer.css'%}">
+    <link rel="stylesheet" href="{% static 'css/header.css'%}">
+    <style>
+    h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            src: url('{% static 'fonts/PlayfairDisplay.ttf'%}') format('truetype');
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+            color: var(--primary-dark);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Хедер -->
+        {% include 'includes/header.html' %}
+
+    <!-- Герой-блок -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>Профессиональное развитие в психологии и медиации</h1>
+            <p class="hero-subtitle">Освойте востребованные практические навыки под руководством экспертов. <span class="hero-highlight">Дистанционное обучение</span> с индивидуальным сопровождением на всех этапах — от теории до начала собственной практики.</p>
+            <div class="hero-btns">
+                <a href="/catalog/" class="btn btn-primary">
+                    <i class="fas fa-book-open mr-2"> </i>  Выбрать программу
+                </a>
+                <button class="btn btn-secondary" id="callbackBtnHero">
+                    <i class="fas fa-phone-alt mr-2"> </i>  Бесплатная консультация
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Преимущества -->
+    <section class="section section-pattern">
+        <div class="container">
+            <h2>Почему выбирают нашу школу</h2>
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Диплом</h3>
+                    <p>Официальные документы установленного образца, регистрируемые в федеральном реестре.</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-laptop-house"></i>
+                    </div>
+                    <h3>100% онлайн-обучение</h3>
+                    <p>Учитесь из любой точки мира в удобное время. Никаких поездок и очных сессий.</p>
+                </div>
+                
+                
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>Лучший формат обучения</h3>
+                    <p>Все уроки уже находятся в базе данных и открываются по мере прохождения курса.</p>
+                </div>
+                
+                <!-- <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Карьерная поддержка</h3>
+                    <p>Помогаем с трудоустройством и началом частной практики после обучения.</p>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Преподаватели
+    <section class="section section-cream">
+        <div class="container">
+            <h2>Наши преподаватели</h2>
+            <div class="teachers-container">
+                <div class="teacher-card">
+                    <div class="teacher-img">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="teacher-info">
+                        <h3>Басина Ирина Михайловна</h3>
+                        <div class="teacher-title">Практический психолог, коуч, медиатор</div>
+                        <p>Сертифицированный консультант в методах Позитивная транскультуральная психотерапия и Транзактный анализ. Опыт работы более 15 лет.</p>
+                    </div>
+                </div>
+                
+                <div class="teacher-card">
+                    <div class="teacher-img">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="teacher-info">
+                        <h3>Дорофеева Елена Владимировна</h3>
+                        <div class="teacher-title">Детский психолог, преподаватель психологии</div>
+                        <p>Педагог-психолог высшей квалификационной категории. Специализируется на работе с детьми и подростками.</p>
+                    </div>
+                </div>
+                
+                <div class="teacher-card">
+                    <div class="teacher-img">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="teacher-info">
+                        <h3>Степина Нелли Васильевна</h3>
+                        <div class="teacher-title">Кандидат психологических наук, медиатор</div>
+                        <p>Специалист в области семейного, группового и возрастно-психологического консультирования. Автор 30+ научных работ.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- Истории успеха -->
+    <section class="stories-section">
+        <div class="container">
+            <h2>Истории успеха наших выпускников</h2>
+            <div class="stories-container">
+                <div class="story-card">
+                    <div class="story-header">
+                        <div class="story-avatar">
+                            <i class="fas fa-female"></i>
+                        </div>
+                        <div class="story-info">
+                            <div class="story-name">Алиса, 34 года</div>
+                            <div class="story-program">Кризисный психолог, Москва</div>
+                            <div class="story-tag">Выпуск 2022</div>
+                        </div>
+                    </div>
+                    <div class="story-body">
+                        <div class="story-timeline">
+                            <div class="timeline-point">
+                                <div class="point-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="point-label">До обучения</div>
+                                <div class="point-value">35 000 ₽/мес</div>
+                            </div>
+                            <div class="timeline-point">
+                                <div class="point-icon">
+                                    <i class="fas fa-rocket"></i>
+                                </div>
+                                <div class="point-label">После обучения</div>
+                                <div class="point-value">120 000 ₽/мес</div>
+                            </div>
+                        </div>
+                        <div class="story-quote">
+                            <p class="story-quote-text">"Обучение в школе полностью изменило мою профессиональную траекторию. Я не просто получила диплом, а приобрела реальные навыки, которые сразу начала применять в практике. Уже через 3 месяца после окончания курса я вела 5 постоянных клиентов."</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <div class="story-header">
+                        <div class="story-avatar">
+                            <i class="fas fa-male"></i>
+                        </div>
+                        <div class="story-info">
+                            <div class="story-name">Михаил, 42 года</div>
+                            <div class="story-program">Медиатор, Санкт-Петербург</div>
+                            <div class="story-tag">Выпуск 2021</div>
+                        </div>
+                    </div>
+                    <div class="story-body">
+                        <div class="story-timeline">
+                            <div class="timeline-point">
+                                <div class="point-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <div class="point-label">До обучения</div>
+                                <div class="point-value">45 000 ₽/мес</div>
+                            </div>
+                            <div class="timeline-point">
+                                <div class="point-icon">
+                                    <i class="fas fa-rocket"></i>
+                                </div>
+                                <div class="point-label">После обучения</div>
+                                <div class="point-value">85 000 ₽/мес</div>
+                            </div>
+                        </div>
+                        <div class="story-quote">
+                            <p class="story-quote-text">"Курс по медиации дал мне не только теоретические знания, но и практические инструменты для работы с конфликтными ситуациями. Теперь я помогаю компаниям разрешать внутренние споры и экономить на судебных издержках. Обучение окупилось за первые 4 месяца практики."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    {% include 'includes/footer.html' %}
+
+    <!-- Модальное окно -->
+    {% include 'includes/modal_call.html' %}
+
+<script src="{% static 'js/modal_call.js' %}"></script>
+</body>
+</html>

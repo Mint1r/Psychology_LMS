@@ -1,0 +1,546 @@
+        :root {
+            --primary-dark: #0D2B1E;
+            --primary-medium: #1C4B36;
+            --primary-light: #2D6B4F;
+            --accent-gold: #C9A86A;
+            --accent-burgundy: #52111d;
+            --accent-sage: #8AA28C;
+            --accent-teal: #2A9D8F;
+            --text-dark: #1C1C1C;
+            --text-medium: #3A3A3A;
+            --text-light: #F8F7F3;
+            --bg-light: #FAF9F5;
+            --bg-cream: #F5F2E8;
+            --gray-light: #E5E2DA;
+            --shadow: rgba(13, 43, 30, 0.08);
+            --shadow-dark: rgba(13, 43, 30, 0.15);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Основной контент */
+        .course-main {
+            flex: 1;
+            padding: 40px 0 60px;
+        }
+
+        /* Заголовок курса */
+        .course-header {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
+            border-radius: 16px;
+            color: white;
+        }
+
+        .course-header h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: var(--text-light);
+        }
+
+        .course-progress {
+            margin-top: 25px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent-gold);
+            border-radius: 5px;
+            width: 65%;
+        }
+
+        /* Секция уроков */
+        .lessons-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            color: var(--primary-dark);
+            margin-bottom: 30px;
+        }
+
+        .lessons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        /* Вариант карточки урока 1: Классическая */
+        .lesson-card-1 {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px var(--shadow);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .lesson-card-1:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px var(--shadow-dark);
+        }
+
+        .lesson-image-1 {
+            height: 160px;
+            background-color: var(--primary-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-image-1::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(13, 43, 30, 0.7), rgba(28, 75, 54, 0.5));
+        }
+
+        .lesson-module-1 {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--accent-gold);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .lesson-number-1 {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            z-index: 2;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .lesson-content-1 {
+            padding: 25px;
+        }
+
+        .lesson-title-1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .lesson-description-1 {
+            color: var(--text-medium);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .lesson-button-1 {
+            display: inline-block;
+            width: 100%;
+            background-color: var(--primary-medium);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .lesson-button-1:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Вариант карточки урока 2: Горизонтальная */
+        .lesson-card-2 {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px var(--shadow);
+            transition: var(--transition);
+            display: flex;
+            min-height: 180px;
+            max-height: 300px;
+            margin-bottom: 20px;
+        }
+
+        .lesson-card-2:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px var(--shadow-dark);
+        }
+
+        .lesson-image-2 {
+            width: 40%;
+            background-color: var(--accent-sage);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-image-2::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(13, 43, 30, 0.7), rgba(138, 162, 140, 0.5));
+        }
+
+        .lesson-module-2 {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--primary-dark);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .lesson-number-2 {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            z-index: 2;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .lesson-content-2 {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lesson-title-2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .lesson-description-2 {
+            color: var(--text-medium);
+            margin-bottom: 20px;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .lesson-button-2 {
+            display: inline-block;
+            background-color: var(--primary-medium);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .lesson-button-2:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Вариант карточки урока 3: С акцентом на модуль */
+        .lesson-card-3 {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px var(--shadow);
+            transition: var(--transition);
+            height: 100%;
+            border-top: 5px solid var(--primary-medium);
+        }
+
+        .lesson-card-3:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px var(--shadow-dark);
+        }
+
+        .lesson-header-3 {
+            background-color: var(--bg-cream);
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .module-badge-3 {
+            display: inline-block;
+            background-color: var(--primary-medium);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .lesson-number-3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .lesson-image-3 {
+            height: 120px;
+            background-color: var(--primary-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-image-3::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(13, 43, 30, 0.6), rgba(42, 157, 143, 0.4));
+        }
+
+        .lesson-content-3 {
+            padding: 25px;
+        }
+
+        .lesson-title-3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .lesson-description-3 {
+            color: var(--text-medium);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .lesson-button-3 {
+            display: inline-block;
+            width: 100%;
+            background-color: var(--primary-medium);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .lesson-button-3:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Вариант карточки урока 4: Минималистичная */
+        .lesson-card-4 {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px var(--shadow);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .lesson-card-4:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px var(--shadow-dark);
+        }
+
+        .lesson-image-4 {
+            height: 100px;
+            background-color: var(--accent-teal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-image-4::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(42, 157, 143, 0.8), rgba(138, 162, 140, 0.6));
+        }
+
+        .lesson-module-4 {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .lesson-number-4 {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            color: white;
+            font-size: 32px;
+            font-weight: 800;
+            z-index: 2;
+            opacity: 0.8;
+        }
+
+        .lesson-content-4 {
+            padding: 25px;
+        }
+
+        .lesson-title-4 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .lesson-meta-4 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .module-info-4 {
+            background-color: var(--bg-cream);
+            color: var(--primary-dark);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .lesson-duration-4 {
+            color: var(--text-medium);
+            font-size: 14px;
+        }
+
+        .lesson-description-4 {
+            color: var(--text-medium);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .lesson-button-4 {
+            display: inline-block;
+            width: 100%;
+            background-color: var(--primary-medium);
+            color: white;
+            padding: 14px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .lesson-button-4:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .lessons-container {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+            
+            .lesson-card-2 {
+                flex-direction: column;
+            }
+            
+            .lesson-image-2 {
+                width: 100%;
+                height: 120px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .course-header h1 {
+                font-size: 28px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .lessons-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .lesson-button-2 {
+                align-self: stretch;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .course-header h1 {
+                font-size: 24px;
+            }
+            
+            .course-header {
+                padding: 20px;
+            }
+        }

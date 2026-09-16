@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог курсов | Школа практической психологии и медиации</title>
+    <link rel="stylesheet" href="{%static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css'%}">
+    <link rel="stylesheet" href="{% static 'css/header.css'%}">
+    <link rel="stylesheet" href="{% static 'css/catalog.css'%}">
+        <style>
+    h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            src: url('{% static 'fonts/PlayfairDisplay.ttf'%}') format('truetype');
+            font-weight: 550;
+            margin-bottom: 1.2rem;
+            color: var(--primary-dark);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Фейк кнопка -->
+    <button class="btn btn-secondary" id="callbackBtnHero" style="display: none;">
+            <i class="fas fa-phone-alt mr-2"> </i>  Бесплатная консультация
+    </button>
+
+
+    <!-- Хедер будет здесь (берется с главной страницы) -->
+     {% include 'includes/header.html' %}
+    
+    <div class="page-header">
+        <div class="container">
+            <h1>Каталог курсов</h1>
+            <p class="page-description">Выберите программу, которая соответствует вашим профессиональным целям. Все курсы доступны в дистанционном формате с поддержкой преподавателей.</p>
+        </div>
+    </div>
+
+    
+    <div class="container">
+        <div class="courses-grid">
+            <!-- Курс 1 -->
+            {% for course in courses %}
+            <div class="course-card">
+                <div class="course-image-container">
+                    <img src="{{course.image.url}}" alt="{{course.title}} баннер" class="course-image">
+                    <div class="course-tag">Популярный</div>
+                </div>
+                <div class="course-content">
+                    <h3 class="course-title">{{course.title}}</h3>
+                    <p class="course-description">{{course.short_description}}</p>
+                    
+                    <div class="course-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Длительность</span>
+                            <span class="meta-value">{{course.lenth}} ч.</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Формат</span>
+                            <span class="meta-value">Онлайн</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Стоимость</span>
+                            <span class="meta-value price"> {{course.price}} ₽</span>
+                        </div>
+                    </div>
+                    
+                    <a href="{%url 'course' course.id %}" class="btn-details">Подробнее о курсе</a>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+
+                <button class="btn btn-secondary" id="callbackBtnHero">
+                    <i class="fas fa-phone-alt mr-2"> </i>  Бесплатная консультация
+                </button>
+    
+    <!-- Футер будет здесь (берется с главной страницы) -->
+     {% include 'includes/footer.html' %}
+     {% include 'includes/modal_call.html' %}
+    
+    <script>
+        // Простая анимация появления карточек
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.course-card');
+            
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 + index * 100);
+            });
+        });
+    </script>
+    <script src="{% static 'js/modal_call.js' %}"></script>
+</body>
+</html>

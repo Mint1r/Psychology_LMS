@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация в системе</title>
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/learn_footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="logo-text">Регистрация</div>
+                </div>
+                <p>Создайте свой аккаунт в системе</p>
+            </div>
+            
+            <form class="login-form" id="loginForm" method="POST" action="{% url 'user_create' %}">
+                {% csrf_token %}
+                
+                <div class="input-group">
+                    <label for="username">Имя пользователя</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="username" name="username" placeholder="Введите имя пользователя" value="{{ request.session.form_data.username|default:'' }}" required>
+                        <i class="fas fa-user field-icon"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="phon">Номер телефона</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="phon" name="phon_number" placeholder="+7 (999) 999-99-99" value="{{ request.session.form_data.phon|default:'' }}" required>
+                        <i class="fas fa-phone field-icon"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Электронная почта</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" name="email" placeholder="aaa@mail.ru" value="{{ request.session.form_data.email|default:'' }}" required>
+                       <i class="fas fa-envelope field-icon"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password1">Пароль</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password1" name="password1" placeholder="Придумайте пароль" required>
+                        <i class="fas fa-lock field-icon"></i>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password1', this)">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password2">Повторите пароль</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password2" name="password2" placeholder="Повторите пароль" required>
+                        <i class="fas fa-shield-alt field-icon"></i>
+                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password2', this)">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="agree" required>
+                    <label for="agree">
+                        Согласен на обработку персональных данных согласно 
+                        <a href="/privacy/" target="_blank">Политике конфиденциальности</a>
+                    </label>
+                </div>
+
+                {% if form.errors %}
+                <div class="messages-container">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert-message alert-error">
+                                <div class="message-content">
+                                    <i class="fas fa-exclamation-circle message-icon"></i>
+                                    <span class="message-text">{{ error }}</span>
+                                </div>
+                                <button type="button" class="message-close">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <button type="submit" class="login-button">
+                    <span>Создать аккаунт</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                
+                <div class="login-footer">
+                    <a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Уже есть аккаунт?</a>
+                    <a href="/"><i class="fas fa-home"></i> На главную</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% include 'includes/footer_l.html' %}
+
+    <script>
+        // Функция переключения видимости пароля
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+
+            function validatePhoneNumber(phone) {
+                const cleaned = phone.replace(/\D/g, '');
+                
+                if (cleaned.length < 10) {
+                    alert('Номер должен содержать не менее 10 цифр');
+                    return false;
+                }
+                
+                let normalizedPhone;
+                if (cleaned.length === 10) {
+                    normalizedPhone = '7' + cleaned;
+                } else if (cleaned.length === 11) {
+                    if (cleaned[0] === '8') {
+                        normalizedPhone = '7' + cleaned.substring(1);
+                    } else if (cleaned[0] === '7') {
+                        normalizedPhone = cleaned;
+                    } else {
+                        alert('Номер должен начинаться с 7 или 8');
+                        return false;
+                    }
+                } else {
+                    alert('Номер должен содержать 10 или 11 цифр');
+                    return false;
+                }
+                
+                const operatorCode = normalizedPhone[1];
+                if (!['9', '4'].includes(operatorCode)) {
+                    alert('Неверный код оператора');
+                    return false;
+                }
+                
+                return normalizedPhone;
+            }
+            
+            // Валидация при отправке
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password1 = document.getElementById('password1').value;
+                const password2 = document.getElementById('password2').value;
+                const phon_num = document.getElementById('phon').value;
+                
+                if (username.length < 3) {
+                    alert('Имя пользователя должно содержать не менее 3 символов');
+                    return;
+                }
+
+                if (password1.length < 6) {
+                    alert('Пароль должен содержать не менее 6 символов');
+                    return;
+                }
+
+                if (password1 !== password2) {
+                    alert('Пароли не совпадают');
+                    return;
+                }
+
+                const validatedPhone = validatePhoneNumber(phon_num);
+                if (!validatedPhone) {
+                    return;
+                }
+
+                form.submit();
+            });
+            
+            // Анимация плавной загрузки
+            const container = document.querySelector('.login-container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(15px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 50);
+
+            // Закрытие alert-сообщений
+            document.querySelectorAll('.message-close').forEach(button => {
+                button.addEventListener('click', function() {
+                    const alert = this.closest('.alert-message');
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-8px)';
+                    setTimeout(() => alert.remove(), 250);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

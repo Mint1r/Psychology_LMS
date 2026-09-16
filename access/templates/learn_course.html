@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{course.title}}</title>
+    <link rel="stylesheet" href="{%static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/learn_course.css'%}">
+    <link rel="stylesheet" href="{% static 'css/learn_footer.css'%}">
+    <link rel="stylesheet" href="{% static 'css/learn_header.css'%}">
+</head>
+
+<style>
+            * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            src: url('{% static 'fonts/Segoe UI.ttf'%}') format('truetype');
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+</style>
+<body>
+
+    {% include 'includes/header_l.html' %}
+
+    <!-- Основной контент страницы курса -->
+    <main class="course-main">
+        <div class="container">
+            <!-- Заголовок курса -->
+            <div class="course-header">
+                <h1>{{course.title}}</h1>
+                <p>{{course.short_description}}</p>
+                
+                <div class="course-progress">
+                    <div class="progress-info">
+                        <span>Прогресс курса</span>
+                        <span>{{progress.percent}}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{progress.percent}}%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок с уроками -->
+            <section class="lessons-section">
+                <h2 class="section-title">Уроки курса</h2>
+            
+                    {% for lesson in lessons_dict%}
+                    <!-- Вариант карточки урока 2: Горизонтальная -->
+                    <div class="lesson-card-2">
+                        <div class="lesson-image-2">
+                            <div class="lesson-module-2">Модуль {{lesson.module_order}}</div>
+                            <div class="lesson-number-2">Урок {{lesson.lesson_number}}</div>
+                        </div>
+                        <div class="lesson-content-2">
+                            <h3 class="lesson-title-2">{{lesson.lesson.lesson.title}}</h3>
+                            <p class="lesson-description-2">{{lesson.lesson.lesson.description}}</p>
+                            <a href="{%url 'learn:learn_lesson' course.id lesson.lesson_id %}"><button class="lesson-button-2">Перейти к уроку</button></a>
+                        </div> 
+                    </div>
+
+                    {%endfor%}
+
+                </div>
+            </section>
+        </div>
+    </main>
+    {% include 'includes/footer_l.html' %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            
+            // Анимация появления карточек при загрузке
+            const animateCards = () => {
+                const cards = document.querySelectorAll('.lesson-card-1, .lesson-card-2, .lesson-card-3, .lesson-card-4');
+                
+                cards.forEach((card, index) => {
+                    const cardPosition = card.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.2;
+                    
+                    if (cardPosition < screenPosition) {
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    }
+                });
+            };
+            
+            // Установка начального состояния для анимации
+            document.querySelectorAll('.lesson-card-1, .lesson-card-2, .lesson-card-3, .lesson-card-4').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            // Запуск анимации при загрузке
+            setTimeout(animateCards, 300);
+            
+            // Запуск анимации при прокрутке
+            window.addEventListener('scroll', animateCards);
+            
+            // Изменение цвета кнопки при наведении
+            document.querySelectorAll('.lesson-button-1, .lesson-button-2, .lesson-button-3, .lesson-button-4').forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 5px 15px var(--shadow-dark)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

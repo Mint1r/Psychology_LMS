@@ -1,0 +1,38 @@
+# Виртуальное окружение
+venv/
+env/
+.venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Django
+db.sqlite3
+*.sqlite3
+/static/
+/staticfiles/
+*.log
+
+# Секреты
+.env
+*.local
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Системные
+.DS_Store
+Thumbs.db
+backup.sql
+db_dump.json

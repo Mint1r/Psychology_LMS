@@ -1,0 +1,553 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 1: Введение в психологическое консультирование</title>
+    <link rel="stylesheet" href="{%static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/learn_lesson.css'%}">
+    <link rel="stylesheet" href="{% static 'css/learn_footer.css'%}">
+</head>
+<style>
+            * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            src: url('{% static 'fonts/Segoe UI.ttf'%}') format('truetype');
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+</style>
+
+<body>
+    <!-- Хэдер будет здесь -->
+
+    <!-- Основной контент урока -->
+    <main class="lesson-main">
+        <div class="container">
+            <!-- Хлебные крошки -->
+            <nav class="breadcrumbs">
+                <a href="{% url 'learn:learn_main' %}">Мои курсы</a>
+                <span class="separator">/</span>
+                <a href="{% url 'learn:learn_course' course.id %}">{{course.title}}</a>
+                <span class="separator">/</span>
+                <span class="current">Урок {{lesson_order}}: {{lesson.title}}</span>
+            </nav>
+
+            <!-- Заголовок урока -->
+            <div class="lesson-header">
+                <h1 class="lesson-title">Урок {{lesson_order}}: {{lesson.title}}</h1>
+                <div class="lesson-meta">
+                    <div class="lesson-meta-item">
+                        <i class="fas fa-book"></i>
+                        <span>Модуль {{module_order}}: Основы консультирования</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок с введением (защита от копирования) -->
+            <section class="lesson-intro" id="protectedText">
+               {{lesson.text_info | linebreaks}}
+                
+               <!-- <div class="copy-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Текст защищен от копирования. Пожалуйста, делайте заметки вручную или используйте предоставленные материалы.</span>
+                </div> -->
+            </section>
+
+            <!-- Видео блок -->
+            <section class="video-section">
+                <h2 class="section-title">
+                    <i class="fas fa-play-circle"></i>
+                    Видеоурок
+                </h2>
+                    <div class="video-container" id="videoContainer">
+
+                        {% if lesson.has_video %}
+                            <video 
+                                controls 
+                                controlsList="nodownload nofullscreen" 
+                                disablePictureInPicture
+                                disableRemotePlayback
+                                id="lessonVideo"
+                            >
+                                <source src="/get_lesson_video/{{ course.id }}/{{ lesson.id }}" type="video/mp4">
+                                Ваш браузер не поддерживает видео тег.
+                            </video>
+
+
+                        {% else %}
+
+                            <div class="no-video-card">
+                                <div class="no-video-icon">
+                                    <i class="fas fa-video-slash"></i>
+                                </div>
+
+                                <div class="no-video-content">
+                                    <h3>Видеоурок отсутствует</h3>
+                                    <p>
+                                        Для данного урока видеоматериал пока не добавлен.
+                                        Вы можете продолжить изучение материалов урока.
+                                    </p>
+                                </div>
+
+                                <div class="no-video-line"></div>
+
+                                <span class="no-video-status">
+                                    <i class="fas fa-info-circle"></i>
+                                    Видео недоступно
+                                </span>
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+            </section>
+
+            <!-- Блоки материалов -->
+            <section class="materials-section">
+                <!-- Обязательные материалы -->
+                <div class="material-block">
+                    <div class="material-header">
+                        <h3 class="material-title">
+                            <i class="fas fa-exclamation-circle" style="margin-right: 10px;"></i>
+                            Обязательно<br>к ознакомлению
+                        </h3>
+                        <div class="material-badge">Обязательно</div>
+                    </div>
+
+                    <ul class="material-list">
+
+                        {% for material in lesson.materials.all %}
+
+                            {% if material.necessity == "necessary" %}
+
+                                <li class="material-item">
+
+                                    <div class="material-info">
+
+                                        {% if material.material_type == "file" %}
+                                            <div class="material-icon">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </div>
+                                        {% else %}
+                                            <div class="material-icon">
+                                                <i class="fas fa-external-link-alt"></i>
+                                            </div>
+                                        {% endif %}
+
+                                        <div class="material-details">
+                                            <h4>{{ material.title }}</h4>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="material-action">
+
+                                        {% if material.material_type == "file" %}
+
+                                            <a href="{% url 'get_lesson_materials' lesson.pk course.pk material.order %}">
+                                                <button class="download-btn">
+                                                    <i class="fas fa-download"></i>
+                                                    Скачать
+                                                </button>
+                                            </a>
+
+                                        {% else %}
+
+                                            <a href="{{ material.link }}" class="link-btn">
+                                                <i class="fas fa-external-link-alt"></i>
+                                                Перейти
+                                            </a>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </li>
+
+                            {% endif %}
+                        {% endfor %}
+
+                    </ul>
+                </div>
+
+                <!-- Рекомендованные материалы -->
+                <div class="material-block">
+                    <div class="material-header">
+                        <h3 class="material-title">
+                            <i class="fas fa-star" style="margin-right: 5px;"></i>
+                            Рекомендовано к ознакомлению
+                        </h3>
+                        <div class="material-badge recommended-badge">
+                            Рекомендовано
+                        </div>
+                    </div>
+
+                    <ul class="material-list">
+
+                        {% for material in lesson.materials.all %}
+
+                            {% if material.necessity == "recommended" %}
+
+                                <li class="material-item">
+
+                                    <div class="material-info">
+
+                                        {% if material.material_type == "file" %}
+                                            <div class="material-icon">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </div>
+                                        {% else %}
+                                            <div class="material-icon">
+                                                <i class="fas fa-external-link-alt"></i>
+                                            </div>
+                                        {% endif %}
+
+                                        <div class="material-details">
+                                            <h4>{{ material.title }}</h4>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="material-action">
+
+                                        {% if material.material_type == "file" %}
+
+                                            <a href="{% url 'get_lesson_materials' lesson.pk course.pk material.id %}">
+                                                <button class="link-btn">
+                                                    <i class="fas fa-download"></i>
+                                                    Скачать
+                                                </button>
+                                            </a>
+
+                                        {% else %}
+
+                                            <a href="{{ material.link }}" class="link-btn">
+                                                <i class="fas fa-external-link-alt"></i>
+                                                Перейти
+                                            </a>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </li>
+
+                            {% endif %}
+
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </section>
+            <!-- Блок с кнопками действий -->
+            <section class="actions-section">
+                <div class="actions-container" id="actionsContainer">
+
+                    {%if test_status == "processing" %}
+                        <button class="action-button test-btn">
+                            <i class="fas fa-clipboard-check"></i>
+                            Тест проверяется
+                        </button>
+                    {%elif lesson_status == "finished" %}
+                        <button class="action-button test-btn">
+                            <i class="fas fa-clipboard-check"></i>
+                            Вы уже прошли урок
+                        </button>
+                    {%elif test_status == "canceled" %}
+
+                    <button class="action-button test-btn" id="testBtn">
+                        <i class="fas fa-clipboard-check"></i>
+                        Попробовать снова
+                    </button>
+                    
+
+                    {%elif lesson.test %}
+                        <!-- Кнопка "Пройти тест" (отображается при наличии теста) -->
+                        <button class="action-button test-btn" id="testBtn">
+                            <i class="fas fa-clipboard-check"></i>
+                            Пройти тест
+                        </button>
+
+                    {%else %}
+                        <!-- Кнопка "Закончить урок" (всегда отображается) -->
+                        <button class="action-button finish-btn" id="finishBtn" form="complit_form">
+                            <i class="fas fa-check-circle"></i>
+                            Закончить урок
+                        </button>
+                        <form method="POST" action="{%url 'learn:complit_lesson' course.id lesson.id %}" id="complit_form">{% csrf_token %}</form>
+                    {%endif%}
+
+                </div>
+            </section>
+
+
+
+            {% if test_status == "canceled" and lesson_status != "finished" %}
+                <section class="test-rejection-section" id="testRejectionSection">
+
+                    <div class="test-rejection-card">
+
+                        <div class="test-rejection-header">
+                            <div class="test-rejection-icon">
+                                <i class="fas fa-times"></i>
+                            </div>
+
+                            <div class="test-rejection-title">
+                                <span class="test-rejection-label">Результат проверки</span>
+                                <h2>Тест не пройден</h2>
+                            </div>
+
+                            <div class="test-rejection-badge">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Отклонено
+                            </div>
+                        </div>
+
+                        <div class="test-rejection-divider"></div>
+
+                        <div class="test-rejection-content">
+
+                            <div class="test-rejection-message">
+                                <i class="fas fa-info-circle"></i>
+                                <p>
+                                    Администратор проверил результат теста и не подтвердил его.
+                                    Ознакомьтесь с комментарием ниже и попробуйте пройти тест повторно.
+                                </p>
+                            </div>
+
+                            <div class="test-rejection-comment">
+                                <div class="test-rejection-comment-header">
+                                    <i class="fas fa-comment-dots"></i>
+                                    <span>Комментарий проверяющего</span>
+                                </div>
+
+                                <div class="test-rejection-comment-body">
+                                    {{ test_coment|default:"Причина отклонения не указана."|linebreaksbr }}
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+            {% endif %}
+            {% if lesson_status == "started" and test_status != "processing" %}
+                {% if lesson.test %}
+                    <!-- Блок для загрузки результатов теста (скрыт по умолчанию) -->
+                <section class="test-results-section" id="testResultsSection">
+                    <form method="POST" action="{%url 'learn:load_test' course.id lesson.id %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <h2 class="section-title">
+                            <i class="fas fa-upload"></i>
+                            Загрузка результатов теста
+                        </h2>
+                        <p>Пожалуйста, загрузите результаты пройденного теста в формате PDF или изображения (JPG, PNG).</p>
+                        
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">Перетащите файл сюда или нажмите для выбора</div>
+                            <div class="upload-subtext">Максимальный размер файла: 10 МБ. Допустимые форматы: PDF, JPG, PNG</div>
+                            <button type="button" class="upload-btn" id="uploadBtn">
+                                <i class="fas fa-folder-open"></i>
+                                Выбрать файл
+                            </button>
+                            <input type="file" name="test_file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" required>
+                            <div class="file-name" id="fileName"></div>
+                        </div>
+                        
+                        <!-- Кнопки действий -->
+                        <div class="form-actions" id="formActions" style="margin-top: 20px; display: flex; gap: 15px; justify-content: center;">
+                            <!-- Кнопка ОТПРАВИТЬ форму -->
+                            <button type="submit" class="action-button submit-btn" id="submitBtn" style="opacity: 0.7;">
+                                <i class="fas fa-paper-plane"></i>
+                                Отправить файл
+                            </button>
+                        
+                        </div>
+                    </form>
+                </section>
+                {%endif%}
+            {%endif%}
+        </div>
+    </main>
+
+    <!-- Футер будет здесь -->
+
+    {% include 'includes/footer_l.html' %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // =========================
+    // Защита текста
+    // =========================
+
+    const protectedText = document.getElementById('protectedText');
+
+    if (protectedText) {
+        protectedText.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            alert('Копирование текста запрещено.');
+        });
+
+        protectedText.addEventListener('selectstart', function (e) {
+            e.preventDefault();
+        });
+
+        protectedText.addEventListener('copy', function (e) {
+            e.preventDefault();
+            alert('Копирование текста запрещено.');
+        });
+    }
+
+
+    // =========================
+    // Защита видео
+    // =========================
+
+    const video = document.getElementById('lessonVideo');
+    const videoContainer = document.getElementById('videoContainer');
+
+    if (video) {
+        video.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            alert('Скачивание видео запрещено.');
+        });
+
+        video.addEventListener('dragstart', function (e) {
+            e.preventDefault();
+        });
+    }
+
+    if (videoContainer) {
+        videoContainer.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            alert('Скачивание видео запрещено.');
+        });
+    }
+
+
+    // =========================
+    // Кнопка теста
+    // =========================
+
+    const testBtn = document.getElementById('testBtn');
+    const testResultsSection = document.getElementById('testResultsSection');
+
+    if (testBtn) {
+        testBtn.addEventListener('click', function () {
+            if (testResultsSection) {
+                testResultsSection.classList.add('active');
+                testResultsSection.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+
+            window.open('{{ test }}', '_blank');
+        });
+    }
+
+
+    // =========================
+    // Загрузка файла
+    // =========================
+
+    const uploadArea = document.getElementById('uploadArea');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+
+    if (!uploadArea || !fileInput) {
+        return;
+    }
+
+    // Открытие выбора файла
+    if (uploadBtn) {
+        uploadBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            fileInput.click();
+        });
+    }
+
+    uploadArea.addEventListener('click', function () {
+        fileInput.click();
+    });
+
+
+    // Выбор файла
+    fileInput.addEventListener('change', function () {
+        if (!fileInput.files.length) {
+            return;
+        }
+
+        const file = fileInput.files[0];
+
+        if (file.size > 10 * 1024 * 1024) {
+            alert('Файл слишком большой. Максимальный размер: 10 МБ.');
+            fileInput.value = '';
+            fileName.textContent = '';
+            return;
+        }
+
+        fileName.textContent = `Выбран файл: ${file.name}`;
+    });
+
+
+    // =========================
+    // Drag & Drop
+    // =========================
+
+    uploadArea.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        uploadArea.style.borderColor = 'var(--primary-medium)';
+        uploadArea.style.backgroundColor = 'var(--bg-cream)';
+    });
+
+    uploadArea.addEventListener('dragleave', function () {
+        uploadArea.style.borderColor = 'var(--gray-light)';
+        uploadArea.style.backgroundColor = '';
+    });
+
+    uploadArea.addEventListener('drop', function (e) {
+        e.preventDefault();
+
+        uploadArea.style.borderColor = 'var(--gray-light)';
+        uploadArea.style.backgroundColor = '';
+
+        if (!e.dataTransfer.files.length) {
+            return;
+        }
+
+        const file = e.dataTransfer.files[0];
+
+        const validTypes = [
+            'application/pdf',
+            'image/jpeg',
+            'image/png'
+        ];
+
+        if (!validTypes.includes(file.type)) {
+            alert('Недопустимый формат файла. Допустимы: PDF, JPG, PNG.');
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+            alert('Файл слишком большой. Максимальный размер: 10 МБ.');
+            return;
+        }
+
+        fileInput.files = e.dataTransfer.files;
+        fileName.textContent = `Выбран файл: ${file.name}`;
+    });
+
+});
+</script>
+
+
+</body>
+</html>

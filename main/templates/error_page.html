@@ -1,0 +1,306 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/footer.css'%}">
+    <link rel="stylesheet" href="{% static 'css/header.css'%}">
+    <title>{{ error_code|default:"404" }} — Страница не найдена</title>
+
+    <style>
+        :root {
+            --primary-dark: #0D2B1E;
+            --primary-medium: #1C4B36;
+            --primary-light: #2D6B4F;
+
+            --accent-gold: #C9A86A;
+            --accent-sage: #8AA28C;
+
+            --text-dark: #1C1C1C;
+            --text-medium: #3A3A3A;
+            --text-light: #F8F7F3;
+
+            --bg-light: #FAF9F5;
+            --bg-cream: #F5F2E8;
+            --gray-light: #E5E2DA;
+
+            --shadow: rgba(13, 43, 30, 0.08);
+            --shadow-dark: rgba(13, 43, 30, 0.15);
+
+            --transition: all 0.35s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .error-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+        }
+
+        .error-container {
+            width: 100%;
+            max-width: 850px;
+            text-align: center;
+        }
+
+        .error-card {
+            position: relative;
+            background: white;
+            border-radius: 20px;
+            padding: 70px 50px;
+            box-shadow: 0 12px 35px var(--shadow-dark);
+            overflow: hidden;
+        }
+
+        .error-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(
+                90deg,
+                var(--primary-dark),
+                var(--primary-light),
+                var(--accent-gold)
+            );
+        }
+
+        .error-code {
+            font-size: clamp(90px, 15vw, 170px);
+            line-height: 0.95;
+            font-weight: 800;
+            letter-spacing: -6px;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+
+        .error-decoration {
+            width: 70px;
+            height: 4px;
+            margin: 0 auto 28px;
+            border-radius: 10px;
+            background: var(--accent-gold);
+        }
+
+        .error-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+
+        .error-description {
+            max-width: 600px;
+            margin: 0 auto 35px;
+            font-size: 17px;
+            color: var(--text-medium);
+        }
+
+        .error-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .error-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 180px;
+            padding: 14px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .error-btn-primary {
+            color: white;
+            background: var(--primary-medium);
+            border: 2px solid var(--primary-medium);
+        }
+
+        .error-btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--shadow-dark);
+        }
+
+        .error-btn-secondary {
+            color: var(--primary-medium);
+            background: transparent;
+            border: 2px solid var(--primary-medium);
+        }
+
+        .error-btn-secondary:hover {
+            color: white;
+            background: var(--primary-medium);
+            transform: translateY(-3px);
+        }
+
+        .error-hint {
+            margin-top: 35px;
+            padding: 15px 20px;
+            background: var(--bg-cream);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 8px;
+            color: var(--text-medium);
+            font-size: 14px;
+        }
+
+        .error-hint strong {
+            color: var(--primary-dark);
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .site-footer {
+            margin-top: 0;
+        }
+
+        /* =========================
+           АДАПТИВНОСТЬ
+        ========================= */
+
+        @media (max-width: 768px) {
+            .error-main {
+                padding: 40px 16px;
+            }
+
+            .error-card {
+                padding: 55px 25px;
+                border-radius: 16px;
+            }
+
+            .error-code {
+                letter-spacing: -4px;
+                font-size: clamp(75px, 23vw, 130px);
+            }
+
+            .error-title {
+                font-size: 26px;
+            }
+
+            .error-description {
+                font-size: 16px;
+            }
+
+            .error-actions {
+                flex-direction: column;
+            }
+
+            .error-btn {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .error-main {
+                padding: 25px 12px;
+            }
+
+            .error-card {
+                padding: 45px 20px;
+            }
+
+            .error-title {
+                font-size: 23px;
+            }
+
+            .error-description {
+                font-size: 15px;
+                margin-bottom: 28px;
+            }
+
+            .error-hint {
+                font-size: 13px;
+                padding: 13px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Твой существующий светлый header -->
+    {% include "includes/header.html" %}
+
+
+    <main class="error-main">
+        <div class="error-container">
+
+            <section class="error-card">
+
+                <div class="error-code">
+                    {{ error_code|default:"404" }}
+                </div>
+
+                <div class="error-decoration"></div>
+
+                <h1 class="error-title">
+                    {{ error_title|default:"Страница не найдена" }}
+                </h1>
+
+                <p class="error-description">
+                    {{ error_message|default:"Похоже, такой страницы больше не существует или вы перешли по неверной ссылке." }}
+                </p>
+
+                <div class="error-actions">
+
+                    <a href="/" class="error-btn error-btn-primary">
+                        На главную
+                    </a>
+
+                    <a href="javascript:history.back()" class="error-btn error-btn-secondary">
+                        Вернуться назад
+                    </a>
+
+                </div>
+
+                <div class="error-hint">
+                    <strong>Совет:</strong>
+                    проверьте адрес страницы или воспользуйтесь навигацией сайта.
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+
+
+    <!-- Твой существующий зеленый footer -->
+    {% include "includes/footer.html" %}
+
+</body>
+</html>
+

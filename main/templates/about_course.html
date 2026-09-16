@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курс - Школа психологии</title>
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/course.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <style>
+    h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            src: url('{% static 'fonts/PlayfairDisplay.ttf'%}') format('truetype');
+            font-weight: 550;
+            margin-bottom: 1.2rem;
+            color: var(--primary-dark);
+        }
+    </style>
+</head>
+
+{% if purchase_error %}
+<div id="purchaseErrorModal" class="purchase-error-modal">
+    <div class="purchase-error-overlay"></div>
+
+    <div class="purchase-error-card">
+        <button
+            type="button"
+            class="purchase-error-close"
+            id="purchaseErrorClose"
+            aria-label="Закрыть"
+        >
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="purchase-error-icon">
+            <i class="fas fa-exclamation"></i>
+        </div>
+
+        <h2 class="purchase-error-title">
+            Не удалось создать платёж
+        </h2>
+
+        <p class="purchase-error-text">
+            При создании платежа произошла ошибка.
+            Попробуйте повторить попытку позже.
+        </p>
+
+        <button
+            type="button"
+            class="purchase-error-button"
+            id="purchaseErrorOk"
+        >
+            Понятно
+        </button>
+    </div>
+</div>
+{% endif %}
+
+<body>
+    {% include 'includes/header.html' %}
+    <main>
+        <section class="course-hero">
+            <div class="container">
+                <h1 class="course-title">{{course.title}}</h1>
+                <p class="course-subtitle">{{course.short_description}}</p>
+                
+                <div class="course-meta">
+                    <div class="meta-item">
+                        <div class="meta-icon">
+                            <i class="far fa-clock"></i>
+                        </div>
+                        <div class="meta-text">
+                            <span class="meta-label">Продолжительность {{purchase_error}}</span>
+                            <span class="meta-value">{{course.lenth}} ак. часов</span>
+                        </div>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <div class="meta-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="meta-text">
+                            <span class="meta-label">Документ</span>
+                            <span class="meta-value">Диплом о переподготовке</span>
+                        </div>
+                    </div>
+                    
+                    <div class="meta-item">
+                        <div class="meta-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="meta-text">
+                            <span class="meta-label">Формат обучения</span>
+                            <span class="meta-value">Онлайн</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Блок с ценой и кнопками действий (Overlapping) -->
+        <section class="course-actions">
+            <div class="container">
+                <div class="action-content">
+                    <div class="price-block">
+                        <span class="price-label">Стоимость курса</span>
+                        <span class="price-value">{{course.price}} ₽</span>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="callbackBtnHero" class="btn btn-consultation">
+                            <i class="far fa-comment-dots"></i> Консультация
+                        </button>
+                        
+                            {%if has_course%}
+                                <a href="{%url 'learn:learn_course' course.id %}" style="text-decoration: none;">
+                                <button class="btn btn-buy">
+                                    <i class="fas fa-shopping-cart"></i> Перейти к курсу
+                                </button>
+                                </a>
+                            {%else%}
+                                <a href="{%url 'documents_load_page' course.id %}" style="text-decoration: none;">
+                                    <button class="btn btn-buy">
+                                        <i class="fas fa-shopping-cart"></i> Записаться на курс
+                                    </button>
+                                </a>
+                            {%endif%}
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Блок с описанием курса -->
+        <section class="course-description">
+            <div class="container">
+                <h2 class="section-title">О курсе</h2>
+                <div class="description-content">
+                    <div class="description-text">
+                        <p>{{course.description|linebreaks}}</p>
+                    </div>
+                    
+                    <div class="description-features">
+                        <h3 class="features-title">Что вы получите</h3>
+                        <ul class="features-list">
+                            {% for course1 in course.output%}
+                            <li>{{course1}}</li>
+                            {%endfor%}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Блок с программой курса -->
+        <section class="course-program">
+            <div class="container">
+                <h2 class="section-title">Программа курса</h2>
+                <div class="program-list">
+                    {% for module in course.modules.all %}
+                    <div class="program-item">
+                        <h3 class="program-item-title"><i class="fas fa-brain"></i> {{module.title}}</h3>
+                        <p class="program-item-desc">{{module.description}}</p>
+                    </div>
+                    {%endfor%}
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Футер (упрощенная версия) -->
+    {% include 'includes/footer.html' %}
+    {% include 'includes/modal_call.html' %}
+
+<script src="{% static 'js/modal_call.js' %}"></script>
+<script src="{% static 'js/purchase_error_modal.js' %}"></script>
+</body>
+</html>

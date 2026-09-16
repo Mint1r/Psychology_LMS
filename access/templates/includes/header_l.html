@@ -1,0 +1,79 @@
+<header class="header">
+    <div class="container">
+        <div class="header-content">
+            <div class="logo-and-menu">
+                <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="logo-text">Школа практической психологии и медиации</div>
+                </a>
+                
+                <!-- Кнопка бургер-меню -->
+                <button class="menu-toggle" aria-label="Открыть меню">
+                    <span class="menu-toggle-line"></span>
+                    <span class="menu-toggle-line"></span>
+                    <span class="menu-toggle-line"></span>
+                </button>
+            </div>
+            
+            <div class="header-links">
+                <a href="/" class="header-link">
+                    <i class="fas fa-home"></i>
+                    <span>Вернуться на сайт</span>
+                </a>
+                <a href="{% url 'learn:learn_main' %}" class="header-link">
+                    <i class="fas fa-user"></i>
+                    <span>Личный кабинет</span>
+                </a>
+                {% if request.user.groups.all|length > 0 %}
+                    {% for group in request.user.groups.all %}
+                        {% if group.name == 'admin' %}
+                            <a href="{% url 'learn:admin_panel' %}" class="header-link">
+                                <i class="fas fa-user"></i>
+                                <span>Управление</span>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</header>
+<script>
+    // Добавьте этот код в конец body или подключите отдельным файлом
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const headerLinks = document.querySelector('.header-links');
+    
+    menuToggle.addEventListener('click', function() {
+        this.classList.toggle('active');
+        headerLinks.classList.toggle('active');
+        
+        // Блокируем скролл страницы при открытом меню
+        if (headerLinks.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    });
+    
+    // Закрываем меню при клике на ссылку
+    document.querySelectorAll('.header-link').forEach(link => {
+        link.addEventListener('click', function() {
+            menuToggle.classList.remove('active');
+            headerLinks.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+    
+    // Закрываем меню при ресайзе окна (если перешли на десктопный режим)
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            menuToggle.classList.remove('active');
+            headerLinks.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+});
+</script>

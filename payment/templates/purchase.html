@@ -1,0 +1,442 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа | {{ course.title }}</title>
+    
+    <!-- Подключение внешних стилей -->
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/purchase.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    
+    <style>
+        /* =========================================
+           БАЗОВЫЕ ПЕРЕМЕННЫЕ И НАСТРОЙКИ
+        ========================================= */
+        :root {
+            --primary-dark: #0D2B1E;     /* Темно-зеленый (футер, акценты) */
+            --primary-medium: #1C4B36;   /* Зеленый (кнопка, плашки) */
+            --primary-light: #2D6B4F;
+            --accent-gold: #C9A86A;      /* Золотой (цены, выделения) */
+            --accent-teal: #2A9D8F;      /* Бирюзовый (шаги, маркеры) */
+            --text-dark: #121212;
+            --text-medium: #4A5568;
+            --text-light: #FFFFFF;
+            
+            --bg-body: #F9F9F7;          /* Светлый фон страницы */
+            --bg-card: #FFFFFF;          /* Белый фон карточки */
+            --bg-receipt: #F5F4F0;       /* Цвет чека */
+            
+            --border-light: #E2E8F0;
+            --shadow-soft: 0 10px 40px rgba(13, 43, 30, 0.06);
+            --shadow-hover: 0 20px 50px rgba(13, 43, 30, 0.12);
+            
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @font-face {
+            font-family: 'Playfair Display';
+            src: url('{% static "fonts/PlayfairDisplay.ttf" %}') format('truetype');
+            font-weight: 500;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-dark);
+        }
+
+        /* Принудительные стили Хедера и Футера для сочетаемости */
+        header {
+            background-color: #FFFFFF !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+        footer {
+            background-color: var(--primary-dark) !important;
+            color: var(--text-light) !important;
+        }
+
+        /* =========================================
+           ОСНОВНАЯ КАРТОЧКА И ЛЕЙАУТ
+        ========================================= */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 60px 20px;
+        }
+
+        .purchase-container {
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .purchase-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .purchase-card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        /* ШАПКА КАРТОЧКИ */
+        .purchase-header {
+            background: var(--primary-dark);
+            color: var(--text-light);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .purchase-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-gold), #FFF3D6);
+        }
+
+        .purchase-title {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .course-name {
+            color: var(--accent-gold);
+            font-size: 1.4rem;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            display: block;
+            margin-bottom: 16px;
+        }
+
+        .purchase-subtitle {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .purchase-content {
+            padding: 40px;
+        }
+
+        /* =========================================
+           БЛОК ДЕТАЛЕЙ (ЧЕК)
+        ========================================= */
+        .transaction-info {
+            background: var(--bg-receipt);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .transaction-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .transaction-title i {
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+        }
+
+        .transaction-details {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.05rem;
+        }
+
+        .detail-label {
+            color: var(--text-medium);
+        }
+
+        .detail-value {
+            font-weight: 600;
+            text-align: right;
+            color: var(--text-dark);
+        }
+
+        .detail-row.total-row {
+            margin-top: 10px;
+            padding-top: 20px;
+            border-top: 2px dashed #D1D5DB;
+        }
+
+        .detail-row.total-row .detail-label {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .detail-value.total {
+            color: var(--primary-dark);
+            font-size: 1.6rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* =========================================
+           ИНСТРУКЦИИ (ЧИСТЫЙ CSS, БЕЗ ИКОНОК)
+        ========================================= */
+        .instructions {
+            margin-bottom: 40px;
+        }
+
+        .instructions-title {
+            font-size: 1.4rem;
+            margin-bottom: 24px;
+        }
+
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            background: rgba(42, 157, 143, 0.1); 
+            color: var(--accent-teal);
+            border: 2px solid rgba(42, 157, 143, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            font-family: system-ui, sans-serif;
+        }
+
+        .step-text {
+            color: var(--text-medium);
+            line-height: 1.5;
+            font-size: 1.05rem;
+            margin-top: 5px;
+        }
+
+        /* =========================================
+           КНОПКА ОПЛАТЫ И ЗАЩИТА
+        ========================================= */
+        .payment-section {
+            text-align: center;
+        }
+
+        .payment-button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px 40px;
+            background: var(--primary-medium);
+            color: var(--text-light);
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .payment-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(28, 75, 54, 0.25);
+        }
+
+        .secure-badge {
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .secure-badge i {
+            color: #10B981; /* Зеленый цвет для замочка безопасности */
+        }
+
+        /* =========================================
+           АДАПТИВНОСТЬ
+        ========================================= */
+        @media (max-width: 600px) {
+            .main-container { padding: 30px 15px; }
+            .purchase-header { padding: 30px 20px; }
+            .purchase-content { padding: 30px 20px; }
+            .detail-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .detail-value { text-align: left; }
+            .detail-row.total-row { flex-direction: row; align-items: center; }
+            .payment-button { font-size: 1.1rem; padding: 16px 20px; }
+        }
+
+        /* =========================================
+           АНИМАЦИИ
+        ========================================= */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { opacity: 0; animation: fadeUp 0.6s ease-out forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+
+<body>
+    <!-- Хедер -->
+    {% include 'includes/header.html' %}
+    
+    <main class="main-container">
+        <div class="purchase-container">
+            <div class="purchase-card animate-in">
+                
+                <div class="purchase-header">
+                    <h1 class="purchase-title">Оформление доступа</h1>
+                    <span class="course-name" id="courseName">«{{ course.title }}»</span>
+                    <p class="purchase-subtitle">Завершите оплату, чтобы мгновенно получить материалы в личном кабинете</p>
+                </div>
+                
+                <div class="purchase-content">
+                    
+                    <!-- Блок деталей (Чек) -->
+                    <div class="transaction-info delay-1 animate-in">
+                        <h2 class="transaction-title"></i> Детали заказа</h2>
+                        
+                        <div class="transaction-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Формат обучения</span>
+                                <span class="detail-value">Самостоятельный + поддержка</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Доступ к материалам</span>
+                                <span class="detail-value">Пожизненный</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Сертификат по итогу</span>
+                                <span class="detail-value">Включен</span>
+                            </div>
+                            <div class="detail-row total-row">
+                                <span class="detail-label">Итого к оплате</span>
+                                <span class="detail-value total" id="coursePrice">{{ course.price }} ₽</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Инструкции (Цифровые шаги) -->
+                    <div class="instructions delay-2 animate-in">
+                        <h2 class="instructions-title">Что будет дальше?</h2>
+                        <div class="steps-list">
+                            <div class="step-item">
+                                <div class="step-number">1</div>
+                                <div class="step-text">Курс появится в вашем личном кабинете сразу после успешной оплаты.</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">2</div>
+                                <div class="step-text">Мы отправим письмо на вашу почту с чеком и подробной инструкцией.</div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">3</div>
+                                <div class="step-text">Вы получите полный доступ ко всем урокам и возможность задавать вопросы куратору.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Оплата -->
+                    <div class="payment-section delay-3 animate-in">
+                        <form method="POST" action="{% url 'purchase_redirect' course.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="payment-button" id="paymentButton">
+                                Перейти к безопасной оплате
+                            </button>
+                        </form>
+                        <div class="secure-badge">
+                            <span>Платеж надежно защищен 256-битным шифрованием</span>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Футер и Модалки -->
+    {% include 'includes/footer.html' %}
+    {% include 'includes/modal_call.html' %}
+    
+    <script src="{% static 'js/modal_call.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Оптимизированный IntersectionObserver для плавной анимации элементов
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+            
+            document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+        });
+
+        // Функция для динамического обновления (если понадобится при интеграции с бекендом/AJAX)
+        function updateCourseInfo(courseInfo) {
+            document.getElementById('courseName').textContent = `«${courseInfo.name}»`;
+            document.getElementById('coursePrice').textContent = `${courseInfo.price} ₽`;
+        }
+    </script>
+</body>
+</html>

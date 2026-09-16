@@ -1,0 +1,649 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Администрирование заявок и тестов</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/admin_panel.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/learn_footer.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/learn_header.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'fontawesome/css/all.min.css' %}"
+    >
+</head>
+
+
+<body>
+
+    <div class="ap-page">
+
+        {% include 'includes/header_l.html' %}
+
+
+        <main class="ap-container">
+
+            <!-- =================================================
+                 HEADER
+                 ================================================= -->
+
+            <header class="ap-panel-header">
+
+                <h1>
+                    📋 Панель администрирования
+                </h1>
+
+                <p>
+                    Управление заявками пользователей и результатами тестирования
+                </p>
+
+            </header>
+
+
+            <!-- =================================================
+                 TABS
+                 ================================================= -->
+
+            <div class="ap-tabs">
+
+                <button
+                    type="button"
+                    class="ap-tab-button active"
+                    data-tab="applications"
+                >
+                    📄 Заявки пользователей
+
+                    <span class="ap-tab-count">
+                        ({{ applications|length }})
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="ap-tab-button"
+                    data-tab="tests"
+                >
+                    📊 Результаты тестов
+
+                    <span class="ap-tab-count">
+                        ({{ tests|length }})
+                    </span>
+                </button>
+
+            </div>
+
+
+            <!-- =================================================
+                 APPLICATIONS
+                 ================================================= -->
+
+            <section
+                id="applications"
+                class="ap-section active"
+            >
+
+                {% if applications %}
+
+                    <div class="ap-table-container">
+
+                        <table class="ap-data-table">
+
+                            <thead>
+                                <tr>
+                                    <th width="40%">
+                                        Пользователь
+                                    </th>
+
+                                    <th width="25%">
+                                        Дата подачи
+                                    </th>
+
+                                    <th width="35%">
+                                        Действия
+                                    </th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for application in applications %}
+
+                                    <tr>
+
+                                        <td
+                                            class="ap-user-cell"
+                                            data-label="Пользователь"
+                                        >
+
+                                            <div class="ap-user-info">
+
+                                                <div class="ap-user-avatar">
+                                                    {{ application.user.first_name|first|upper }}{{ application.user.last_name|first|upper }}
+                                                </div>
+
+                                                <div class="ap-user-details">
+
+                                                    <div class="ap-user-name">
+                                                        {{ application.user.get_full_name }}
+                                                    </div>
+
+                                                    <div class="ap-user-email">
+                                                        {{ application.user.email }}
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <td
+                                            class="ap-date ap-date-cell"
+                                            data-label="Дата"
+                                        >
+
+                                            <div>
+                                                {{ application.created_at|date:"d.m.Y" }}
+                                            </div>
+
+                                            <div class="ap-date-time">
+                                                {{ application.created_at|date:"H:i" }}
+                                            </div>
+
+                                        </td>
+
+
+                                        <td
+                                            class="ap-action-cell"
+                                            data-label="Действия"
+                                        >
+
+                                            <button
+                                                type="button"
+                                                class="ap-action-btn ap-view-application-btn"
+
+                                                data-id="{{ application.id }}"
+
+                                                data-user-name="{{ application.user.get_full_name }}"
+                                                data-user-email="{{ application.user.email }}"
+
+                                                data-diploma="/user-documents/diploma/{{ application.id }}"
+                                                data-diploma-name="{{ application.diploma.name|default:'Диплом' }}"
+
+                                                data-passport-main="/user-documents/passport_main/{{ application.id }}"
+                                                data-passport-main-name="{{ application.passport_main.name|default:'Паспорт (главная)' }}"
+
+                                                data-passport-registration="/user-documents/passport_registration/{{ application.id }}"
+                                                data-passport-registration-name="{{ application.passport_registration.name|default:'Паспорт (прописка)' }}"
+
+                                                data-snils="/user-documents/snils/{{ application.id }}"
+                                                data-snils-name="{{ application.snils.name|default:'СНИЛС' }}"
+                                            >
+                                                👁️ Просмотреть документы
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="ap-empty-state">
+
+                        <div class="ap-empty-icon">
+                            📭
+                        </div>
+
+                        <h3>
+                            Заявки отсутствуют
+                        </h3>
+
+                        <p>
+                            На данный момент нет заявок, ожидающих рассмотрения.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+
+            {% csrf_token %}
+
+
+            <!-- =================================================
+                 TESTS
+                 ================================================= -->
+
+            <section
+                id="tests"
+                class="ap-section"
+            >
+
+                {% if tests %}
+
+                    <div class="ap-table-container">
+
+                        <table class="ap-data-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th width="40%">
+                                        Пользователь
+                                    </th>
+
+                                    <th width="25%">
+                                        Дата тестирования
+                                    </th>
+
+                                    <th width="35%">
+                                        Действия
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for test in tests %}
+
+                                    <tr>
+
+                                        <td
+                                            class="ap-user-cell"
+                                            data-label="Пользователь"
+                                        >
+
+                                            <div class="ap-user-info">
+
+                                                <div class="ap-user-avatar">
+                                                </div>
+
+                                                <div class="ap-user-details">
+
+                                                    <div class="ap-user-name">
+                                                        {{ test.user.username }}
+                                                    </div>
+
+                                                    <div class="ap-user-email">
+                                                        {{ test.user.email }}
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        <td
+                                            class="ap-date ap-date-cell"
+                                            data-label="Дата"
+                                        >
+
+                                            <div>
+                                                {{ test.created_at|date:"d.m.Y" }}
+                                            </div>
+
+                                            <div class="ap-date-time">
+                                                {{ test.created_at|date:"H:i" }}
+                                            </div>
+
+                                        </td>
+
+
+                                        <td
+                                            class="ap-action-cell"
+                                            data-label="Действия"
+                                        >
+
+                                            <button
+                                                type="button"
+                                                class="ap-action-btn ap-view-test-btn"
+
+                                                data-id="{{ test.id }}"
+
+                                                data-user-name="{{ test.user.username }}"
+                                                data-user-email="{{ test.user.fon_number }}"
+
+                                                data-file-url="/user-tests/{{ test.id }}"
+
+                                                data-file-name="Задание к уроку '{{ test.lesson.title }}'"
+
+                                                data-file-size="{{ test.test_results.size|filesizeformat }}"
+                                            >
+                                                📄 Просмотреть тест
+                                            </button>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="ap-empty-state">
+
+                        <div class="ap-empty-icon">
+                            📊
+                        </div>
+
+                        <h3>
+                            Тесты отсутствуют
+                        </h3>
+
+                        <p>
+                            На данный момент нет тестов, ожидающих проверки.
+                        </p>
+
+                    </div>
+
+                {% endif %}
+
+            </section>
+
+        </main>
+
+
+        {% include 'includes/footer_l.html' %}
+
+
+        <!-- =====================================================
+             APPLICATION MODAL
+             ===================================================== -->
+
+        <div
+            id="application-modal"
+            class="ap-modal ap-application-modal"
+        >
+
+            <div class="ap-modal-content">
+
+                <div class="ap-modal-header">
+
+                    <h2>
+                        📁 Документы пользователя
+                    </h2>
+
+                    <button
+                        type="button"
+                        class="ap-close-btn"
+                    >
+                        &times;
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="application-modal-body"
+                    class="ap-modal-body"
+                >
+                </div>
+
+
+                <div class="ap-modal-footer">
+
+                    <div
+                        id="modal-user-info"
+                        class="ap-modal-footer-info"
+                    >
+                    </div>
+
+
+                    <div class="ap-modal-actions">
+
+                        <button
+                            type="button"
+                            class="ap-reject-btn"
+                            id="reject-application"
+                        >
+                            ❌ Отклонить заявку
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="ap-accept-btn"
+                            id="accept-application"
+                        >
+                            ✅ Принять заявку
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             TEST MODAL
+             ===================================================== -->
+
+        <div
+            id="test-modal"
+            class="ap-modal ap-test-modal"
+        >
+
+            <div class="ap-modal-content">
+
+                <div class="ap-modal-header">
+
+                    <h2>
+                        📊 Результат тестирования
+                    </h2>
+
+                    <button
+                        type="button"
+                        class="ap-close-btn"
+                    >
+                        &times;
+                    </button>
+
+                </div>
+
+
+                <div class="ap-modal-body">
+
+                    <div class="ap-test-info-card">
+
+                        <div class="ap-test-info-header">
+
+                            <div class="ap-test-user-info">
+
+                                <div
+                                    id="test-user-avatar"
+                                    class="ap-test-user-avatar"
+                                >
+                                </div>
+
+
+                                <div class="ap-test-user-details">
+
+                                    <h3 id="test-user-name"></h3>
+
+                                    <div
+                                        id="test-user-email"
+                                        class="ap-test-user-email"
+                                    >
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="ap-test-file-preview">
+
+                            <div class="ap-test-file-info">
+
+                                <div class="ap-file-icon-large">
+                                    📄
+                                </div>
+
+
+                                <div class="ap-file-details">
+
+                                    <div
+                                        id="test-file-name"
+                                        class="ap-file-name"
+                                    >
+                                    </div>
+
+                                    <div
+                                        id="test-file-size"
+                                        class="ap-file-size"
+                                    >
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                id="test-file-preview"
+                                class="ap-document-preview"
+                            >
+
+                                <div class="ap-document-placeholder">
+                                    📄 Предпросмотр файла
+                                </div>
+
+                            </div>
+
+
+                            <div class="ap-test-actions">
+
+                                <a
+                                    id="test-download-link"
+                                    href="#"
+                                    target="_blank"
+                                    class="ap-download-btn"
+                                >
+                                    ⬇️ Скачать файл
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- COMMENT -->
+
+                    <div class="ap-comment-block">
+
+                        <h4 class="ap-comment-title">
+                            💬 Комментарий проверяющего
+                        </h4>
+
+
+                        <textarea
+                            id="test-comment"
+                            class="ap-test-comment"
+                            placeholder="Введите комментарий к результату тестирования..."
+                            required
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ap-modal-footer">
+
+                    <div class="ap-modal-footer-info">
+
+                        ID теста:
+                        <span id="test-id-display"></span>
+
+                    </div>
+
+
+                    <div class="ap-modal-actions">
+
+                        <button
+                            type="button"
+                            class="ap-reject-btn"
+                            id="reject-test"
+                        >
+                            ❌ Отклонить тест
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="ap-accept-btn"
+                            id="accept-test"
+                        >
+                            ✅ Принять тест
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script src="{% static 'js/admin_panel.js' %}"></script>
+
+</body>
+
+</html>
+`

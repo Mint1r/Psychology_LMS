@@ -1,0 +1,143 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в систему</title>
+    <link rel="stylesheet" href="{% static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/learn_footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-sign-in-alt"></i>
+                    </div>
+                    <div class="logo-text">Вход</div>
+                </div>
+                <p>Войдите в свой аккаунт</p>
+            </div>
+            
+            <form class="login-form" id="loginForm" method="POST" action="{% url 'login' %}">
+                {% csrf_token %}
+                <h2>Авторизация</h2>
+                
+                <div class="input-group">
+                    <label for="username">Имя пользователя</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="username" name="username" placeholder="Введите имя пользователя" required>
+                        <i class="fas fa-user field-icon"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Пароль</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+                        <i class="fas fa-lock field-icon"></i>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                {% if messages %}
+                <div class="messages-container">
+                    {% for message in messages %}
+                        <div class="alert-message alert-{% if message.tags == 'error' %}error{% else %}{{ message.tags }}{% endif %}">
+                            <div class="message-content">
+                                <i class="fas fa-exclamation-circle message-icon"></i>
+                                <span class="message-text">{{ message }}</span>
+                            </div>
+                            <button type="button" class="message-close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <button type="submit" class="login-button">
+                    <span>Войти</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                
+                <div class="login-footer" id = 'login-footer-3'>
+                    <a href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Создать аккаунт</a>
+                    <a href="/"><i class="fas fa-home"></i> На главную</a>
+                    <a href="{%url 'password_reset' %}"><i class="fas fa-home"></i> Изменить пароль</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% include 'includes/footer_l.html' %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('loginForm');
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            // Переключение видимости пароля
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    const icon = this.querySelector('i');
+                    if (type === 'password') {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
+                });
+            }
+            
+            // Валидация формы при отправке
+            form.addEventListener('submit', function(e) {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (username.length < 3) {
+                    e.preventDefault();
+                    alert('Имя пользователя должно содержать не менее 3 символов');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    e.preventDefault();
+                    alert('Пароль должен содержать не менее 6 символов');
+                    return;
+                }
+            });
+            
+            // Анимация плавной загрузки
+            const container = document.querySelector('.login-container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(15px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 50);
+
+            // Закрытие сообщений
+            document.querySelectorAll('.message-close').forEach(button => {
+                button.addEventListener('click', function() {
+                    const alert = this.closest('.alert-message');
+                    alert.style.opacity = '0';
+                    alert.style.transform = 'translateY(-8px)';
+                    setTimeout(() => alert.remove(), 250);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

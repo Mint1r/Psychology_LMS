@@ -1,0 +1,34 @@
+<header class="site-header">
+    <div class="header-container">
+        <a href="/" class="logo">
+            <i class="fas fa-brain"></i>
+            <div class="logo-text">
+                <div class="logo-main">Школа практической психологии и медиации</div>
+            </div>
+        </a>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="{% url 'main' %}" >Главная</a></li>
+                <li><a href="{% url 'catalog' %}">Каталог</a></li>
+                <li><a href="{%url 'info'%}">О нас</a></li>
+                <li><a href="/documents/">Документы</a></li>
+                <li>
+                    <button class="btn btn-primary" id="callbackBtnHeader">
+                        Заказать звонок
+                    </button>
+                </li>
+                <!-- Добавленная кнопка ЛК -->
+                <li>
+                    <a href="{%url 'learn:learn_main' %}" class="account-link" title="Личный кабинет">
+                        <i class="fas fa-user"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

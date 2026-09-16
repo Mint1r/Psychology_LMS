@@ -1,0 +1,453 @@
+        :root {
+            --primary-dark: #0D2B1E;
+            --primary-medium: #1C4B36;
+            --primary-light: #2D6B4F;
+            --accent-gold: #C9A86A;
+            --accent-burgundy: #52111d;
+            --accent-sage: #8AA28C;
+            --accent-teal: #2A9D8F;
+            --text-dark: #1C1C1C;
+            --text-medium: #3A3A3A;
+            --text-light: #F8F7F3;
+            --bg-light: #FAF9F5;
+            --bg-cream: #F5F2E8;
+            --gray-light: #E5E2DA;
+            --shadow: rgba(13, 43, 30, 0.08);
+            --shadow-dark: rgba(13, 43, 30, 0.15);
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-cream) 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Основной контейнер */
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .purchase-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Карточка оформления */
+        .purchase-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px var(--shadow-dark);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .purchase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px var(--shadow-dark);
+        }
+
+        .purchase-header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-medium));
+            color: var(--text-light);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .purchase-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .purchase-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .purchase-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .course-name {
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 2.2rem;
+            display: block;
+            margin-top: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .purchase-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Основное содержание */
+        .purchase-content {
+            padding: 50px;
+        }
+
+        .transaction-info {
+            background: var(--bg-cream);
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 40px;
+            border: 2px solid var(--gray-light);
+        }
+
+        .transaction-title {
+            font-size: 1.6rem;
+            color: var(--primary-dark);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .transaction-title::before {
+            content: '📋';
+            font-size: 2rem;
+        }
+
+        .transaction-description {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-medium);
+            margin-bottom: 30px;
+        }
+
+        .transaction-details {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            border: 2px solid var(--accent-sage);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--primary-dark);
+        }
+
+        .detail-label {
+            color: var(--text-medium);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .detail-value.total {
+            color: var(--primary-dark);
+            font-size: 1.4rem;
+        }
+
+        /* Блок с инструкцией */
+        .instructions {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 40px;
+            border-left: 6px solid var(--accent-teal);
+        }
+
+        .instructions-title {
+            font-size: 1.6rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .instructions-title::before {
+            content: '✨';
+            font-size: 2rem;
+        }
+
+        .instructions-list {
+            list-style: none;
+        }
+
+        .instructions-list li {
+            margin-bottom: 18px;
+            padding-left: 35px;
+            position: relative;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-medium);
+        }
+
+        .instructions-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-teal);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Блок поддержки */
+        .support-info {
+            background: linear-gradient(135deg, #fff8f0, #ffe8cc);
+            border-radius: 16px;
+            padding: 30px;
+            border: 2px solid var(--accent-gold);
+            margin-bottom: 40px;
+        }
+
+        .support-title {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .support-title::before {
+            content: '📞';
+            font-size: 2rem;
+        }
+
+        .support-text {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: var(--text-medium);
+            margin-bottom: 25px;
+        }
+
+        .support-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--accent-gold), #d4b074);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .support-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(201, 168, 106, 0.3);
+            background: linear-gradient(135deg, #d4b074, var(--accent-gold));
+        }
+
+        /* Кнопка оплаты */
+        .payment-section {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 2px solid var(--gray-light);
+        }
+
+        .payment-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 22px 50px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-medium));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .payment-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .payment-button:hover {
+            background: linear-gradient(135deg, var(--primary-medium), var(--primary-dark));
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(13, 43, 30, 0.2);
+        }
+
+        .payment-button:hover::before {
+            left: 100%;
+        }
+
+        .payment-button .icon {
+            font-size: 1.8rem;
+        }
+
+        .payment-button .text {
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+        }
+
+        .secure-payment {
+            margin-top: 20px;
+            font-size: 1rem;
+            color: var(--text-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .secure-payment::before {
+            content: '🔒';
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 20px 15px;
+            }
+            
+            .purchase-header {
+                padding: 30px 20px;
+            }
+            
+            .purchase-title {
+                font-size: 2.2rem;
+            }
+            
+            .course-name {
+                font-size: 1.8rem;
+            }
+            
+            .purchase-content {
+                padding: 30px;
+            }
+            
+            .transaction-info,
+            .instructions,
+            .support-info {
+                padding: 25px;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .payment-button {
+                padding: 18px 35px;
+                width: 100%;
+            }
+            
+            .payment-button .text {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .purchase-header {
+                padding: 25px 15px;
+            }
+            
+            .purchase-title {
+                font-size: 1.8rem;
+            }
+            
+            .course-name {
+                font-size: 1.5rem;
+            }
+            
+            .purchase-content {
+                padding: 20px;
+            }
+            
+            .transaction-title,
+            .instructions-title,
+            .support-title {
+                font-size: 1.4rem;
+            }
+            
+            .payment-button {
+                padding: 16px 25px;
+                font-size: 1.2rem;
+            }
+            
+            .payment-button .text {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Анимации */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; opacity: 0; }
+        .delay-2 { animation-delay: 0.4s; opacity: 0; }
+        .delay-3 { animation-delay: 0.6s; opacity: 0; }
+        .delay-4 { animation-delay: 0.8s; opacity: 0; }

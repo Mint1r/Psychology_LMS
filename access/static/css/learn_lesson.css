@@ -1,0 +1,1616 @@
+:root {
+    --primary-dark: #0D2B1E;
+    --primary-medium: #1C4B36;
+    --primary-light: #2D6B4F;
+    --accent-gold: #C9A86A;
+    --accent-burgundy: #52111d;
+    --accent-sage: #8AA28C;
+    --accent-teal: #2A9D8F;
+    --text-dark: #1C1C1C;
+    --text-medium: #3A3A3A;
+    --text-light: #F8F7F3;
+    --bg-light: #FAF9F5;
+    --bg-cream: #F5F2E8;
+    --gray-light: #E5E2DA;
+    --shadow: rgba(13, 43, 30, 0.08);
+    --shadow-dark: rgba(13, 43, 30, 0.15);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* =========================================
+   ОСНОВНОЙ КОНТЕНТ
+   ========================================= */
+
+.lesson-main {
+    flex: 1;
+    padding: 40px 0 60px;
+}
+
+/* =========================================
+   ХЛЕБНЫЕ КРОШКИ
+   ========================================= */
+
+.breadcrumbs {
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: var(--text-medium);
+    line-height: 1.5;
+}
+
+.breadcrumbs a {
+    color: var(--primary-medium);
+    transition: var(--transition);
+}
+
+.breadcrumbs a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+.breadcrumbs .separator {
+    margin: 0 8px;
+    color: var(--text-medium);
+}
+
+.breadcrumbs .current {
+    color: var(--text-medium);
+}
+
+/* =========================================
+   ЗАГОЛОВОК УРОКА
+   ========================================= */
+
+.lesson-header {
+    margin-bottom: 40px;
+}
+
+.lesson-title {
+    font-size: 36px;
+    color: var(--primary-dark);
+    margin-bottom: 15px;
+    line-height: 1.25;
+    word-break: break-word;
+}
+
+.lesson-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    color: var(--text-medium);
+    font-size: 16px;
+}
+
+.lesson-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lesson-meta-item i {
+    color: var(--primary-medium);
+    flex-shrink: 0;
+}
+
+/* =========================================
+   ТЕКСТ УРОКА
+   ========================================= */
+
+.lesson-intro {
+    background-color: white;
+    border-radius: 12px;
+    padding: 35px;
+    margin-bottom: 40px;
+    box-shadow: 0 5px 20px var(--shadow);
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.intro-label {
+    display: inline-block;
+    background-color: var(--primary-medium);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.lesson-intro p {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+}
+
+.lesson-intro p:last-child {
+    margin-bottom: 0;
+}
+
+.copy-warning {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--bg-cream);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-gold);
+    font-size: 14px;
+    color: var(--text-medium);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.copy-warning i {
+    color: var(--accent-gold);
+    font-size: 16px;
+}
+
+/* =========================================
+   ВИДЕО
+   ========================================= */
+
+.video-section {
+    margin-bottom: 50px;
+}
+
+.section-title {
+    font-size: 24px;
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.3;
+}
+
+.section-title i {
+    color: var(--primary-medium);
+    flex-shrink: 0;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px var(--shadow-dark);
+    background-color: #000;
+}
+
+.video-container video {
+    width: 100%;
+    height: auto;
+    display: block;
+    outline: none;
+}
+
+.video-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: 5;
+    cursor: not-allowed;
+}
+
+.video-protection-message {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+}
+
+/* =========================================
+   МАТЕРИАЛЫ
+   ========================================= */
+
+.materials-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.material-block {
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 20px var(--shadow);
+    height: 100%;
+}
+
+.material-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--gray-light);
+}
+
+.material-title {
+    font-size: 22px;
+    color: var(--primary-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1.3;
+}
+
+.material-title i {
+    color: var(--primary-medium);
+    flex-shrink: 0;
+}
+
+.material-badge {
+    flex-shrink: 0;
+    background-color: var(--accent-burgundy);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.recommended-badge {
+    background-color: var(--accent-teal);
+}
+
+.material-list {
+    list-style: none;
+}
+
+.material-item {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--gray-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.material-item:last-child {
+    border-bottom: none;
+}
+
+.material-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 0;
+    flex: 1;
+}
+
+.material-icon {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    background-color: var(--bg-cream);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-medium);
+    font-size: 18px;
+}
+
+.material-details {
+    min-width: 0;
+}
+
+.material-details h4 {
+    font-size: 17px;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.material-details p {
+    font-size: 14px;
+    color: var(--text-medium);
+}
+
+.material-action {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+}
+
+.download-btn,
+.link-btn {
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: var(--transition);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+    min-height: 44px;
+}
+
+.download-btn {
+    background-color: var(--primary-medium);
+    color: white;
+    border: 2px solid var(--primary-medium);
+}
+
+.download-btn:hover {
+    background-color: var(--bg-light);
+    color: var(--primary-medium);
+}
+
+.link-btn {
+    background-color: transparent;
+    color: var(--primary-medium);
+    border: 2px solid var(--primary-medium);
+}
+
+.link-btn:hover {
+    background-color: var(--primary-medium);
+    color: white;
+}
+
+/* =========================================
+   КНОПКИ ДЕЙСТВИЙ
+   ========================================= */
+
+.actions-section {
+    background-color: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 5px 20px var(--shadow);
+    margin-bottom: 40px;
+}
+
+.actions-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.action-button {
+    flex: 1;
+    min-width: 250px;
+    min-height: 60px;
+    padding: 16px 24px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    text-align: center;
+}
+
+.finish-btn {
+    background-color: var(--primary-medium);
+    color: white;
+}
+
+.finish-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px var(--shadow);
+}
+
+.test-btn {
+    background-color: var(--accent-gold);
+    color: var(--text-dark);
+}
+
+.test-btn:hover {
+    background-color: #b89a5f;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(201, 168, 106, 0.3);
+}
+
+/* =========================================
+   ЗАГРУЗКА РЕЗУЛЬТАТОВ ТЕСТА
+   ========================================= */
+
+.test-results-section {
+    background-color: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 5px 20px var(--shadow);
+    margin-top: 30px;
+}
+
+.test-results-section.active {
+    display: block;
+}
+
+.test-results-section p {
+    color: var(--text-medium);
+    line-height: 1.6;
+}
+
+.upload-area {
+    border: 2px dashed var(--gray-light);
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    margin-top: 20px;
+    transition: var(--transition);
+}
+
+.upload-area:hover {
+    border-color: var(--primary-medium);
+    background-color: var(--bg-cream);
+}
+
+.upload-icon {
+    font-size: 48px;
+    color: var(--primary-medium);
+    margin-bottom: 20px;
+}
+
+.upload-text {
+    font-size: 18px;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+.upload-subtext {
+    font-size: 14px;
+    color: var(--text-medium);
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.upload-btn {
+    background-color: var(--primary-medium);
+    color: white;
+    padding: 12px 30px;
+    min-height: 46px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.upload-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+.file-name {
+    margin-top: 15px;
+    font-size: 14px;
+    color: var(--primary-medium);
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+/* =========================================
+   КАРТОЧКА "ВИДЕО ОТСУТСТВУЕТ"
+   ========================================= */
+
+.no-video-card {
+    position: relative;
+    width: 100%;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 40px;
+    background: linear-gradient(
+        145deg,
+        rgba(245, 242, 232, 0.96),
+        rgba(250, 249, 245, 0.98)
+    );
+    border: 1px solid rgba(201, 168, 106, 0.28);
+    border-radius: 18px;
+    box-shadow:
+        0 12px 35px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    overflow: hidden;
+    text-align: center;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.no-video-card::before {
+    content: "";
+    position: absolute;
+    width: 240px;
+    height: 240px;
+    top: -120px;
+    right: -80px;
+    background: rgba(201, 168, 106, 0.10);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.no-video-card::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    bottom: -100px;
+    left: -70px;
+    background: rgba(45, 107, 79, 0.07);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.no-video-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(201, 168, 106, 0.48);
+    box-shadow:
+        0 18px 45px var(--shadow-dark),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.no-video-icon {
+    position: relative;
+    z-index: 2;
+    width: 82px;
+    height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    background: var(--primary-dark);
+    border: 1px solid rgba(201, 168, 106, 0.55);
+    border-radius: 50%;
+    box-shadow:
+        0 10px 25px rgba(13, 43, 30, 0.18),
+        0 0 0 8px rgba(201, 168, 106, 0.08);
+    transition: var(--transition);
+}
+
+.no-video-icon i {
+    font-size: 30px;
+    color: var(--accent-gold);
+    transition: var(--transition);
+}
+
+.no-video-card:hover .no-video-icon {
+    transform: scale(1.05);
+    box-shadow:
+        0 14px 30px rgba(13, 43, 30, 0.22),
+        0 0 0 10px rgba(201, 168, 106, 0.10);
+}
+
+.no-video-card:hover .no-video-icon i {
+    transform: scale(1.08);
+}
+
+.no-video-content {
+    position: relative;
+    z-index: 2;
+    max-width: 560px;
+}
+
+.no-video-content h3 {
+    margin: 0 0 12px;
+    color: var(--primary-dark);
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+}
+
+.no-video-content p {
+    margin: 0;
+    color: var(--text-medium);
+    font-size: 0.98rem;
+    line-height: 1.7;
+}
+
+.no-video-line {
+    position: relative;
+    z-index: 2;
+    width: 55px;
+    height: 2px;
+    margin: 25px 0 18px;
+    background: var(--accent-gold);
+    border-radius: 10px;
+    opacity: 0.75;
+}
+
+.no-video-status {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background: rgba(13, 43, 30, 0.055);
+    border: 1px solid rgba(13, 43, 30, 0.08);
+    border-radius: 50px;
+    color: var(--primary-medium);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+.no-video-status i {
+    color: var(--accent-gold);
+    font-size: 0.8rem;
+}
+
+/* =========================================
+   КАРТОЧКА ОТКЛОНЁННОГО ТЕСТА
+   ========================================= */
+
+.test-rejection-section {
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.test-rejection-card {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(
+        145deg,
+        rgba(250, 249, 245, 0.98),
+        rgba(245, 242, 232, 0.96)
+    );
+    border: 1px solid rgba(82, 17, 29, 0.16);
+    border-radius: 18px;
+    box-shadow:
+        0 10px 30px var(--shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.test-rejection-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 16px 40px var(--shadow-dark),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.test-rejection-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(
+        90deg,
+        var(--accent-burgundy),
+        var(--accent-gold)
+    );
+}
+
+.test-rejection-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 28px 30px 24px;
+}
+
+.test-rejection-icon {
+    flex: 0 0 auto;
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(82, 17, 29, 0.08);
+    border: 1px solid rgba(82, 17, 29, 0.14);
+    border-radius: 50%;
+    box-shadow:
+        0 6px 18px rgba(82, 17, 29, 0.08),
+        0 0 0 6px rgba(82, 17, 29, 0.035);
+}
+
+.test-rejection-icon i {
+    font-size: 22px;
+    color: var(--accent-burgundy);
+}
+
+.test-rejection-title {
+    flex: 1;
+    min-width: 0;
+}
+
+.test-rejection-label {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--text-medium);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.test-rejection-title h2 {
+    margin: 0;
+    color: var(--primary-dark);
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.test-rejection-badge {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background: rgba(82, 17, 29, 0.08);
+    border: 1px solid rgba(82, 17, 29, 0.13);
+    border-radius: 50px;
+    color: var(--accent-burgundy);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.test-rejection-badge i {
+    font-size: 12px;
+}
+
+.test-rejection-divider {
+    height: 1px;
+    margin: 0 30px;
+    background: linear-gradient(
+        90deg,
+        rgba(82, 17, 29, 0.16),
+        var(--gray-light),
+        transparent
+    );
+}
+
+.test-rejection-content {
+    padding: 24px 30px 30px;
+}
+
+.test-rejection-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding: 15px 17px;
+    background: rgba(201, 168, 106, 0.10);
+    border-left: 3px solid var(--accent-gold);
+    border-radius: 8px;
+}
+
+.test-rejection-message i {
+    flex: 0 0 auto;
+    margin-top: 3px;
+    color: var(--accent-gold);
+    font-size: 16px;
+}
+
+.test-rejection-message p {
+    margin: 0;
+    color: var(--text-medium);
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.test-rejection-comment {
+    background: white;
+    border: 1px solid var(--gray-light);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.test-rejection-comment-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: var(--bg-cream);
+    border-bottom: 1px solid var(--gray-light);
+    color: var(--primary-dark);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.test-rejection-comment-header i {
+    color: var(--primary-medium);
+    font-size: 15px;
+}
+
+.test-rejection-comment-body {
+    padding: 20px;
+    color: var(--text-dark);
+    font-size: 15px;
+    line-height: 1.7;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.test-rejection-comment-body p {
+    margin: 0 0 10px;
+}
+
+.test-rejection-comment-body p:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================================
+   ДО 992PX
+   ========================================= */
+
+@media (max-width: 992px) {
+    .materials-section {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .action-button {
+        min-width: 100%;
+    }
+}
+
+/* =========================================
+   ПЛАНШЕТЫ
+   ========================================= */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    .lesson-main {
+        padding: 24px 0 40px;
+    }
+
+    .breadcrumbs {
+        margin-bottom: 20px;
+        font-size: 12px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    .breadcrumbs .separator {
+        margin: 0 5px;
+    }
+
+    .lesson-header {
+        margin-bottom: 26px;
+    }
+
+    .lesson-title {
+        font-size: 26px;
+        line-height: 1.25;
+        margin-bottom: 12px;
+    }
+
+    .lesson-meta {
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    .lesson-meta-item {
+        align-items: flex-start;
+        gap: 7px;
+    }
+
+    .lesson-intro {
+        padding: 20px;
+        margin-bottom: 28px;
+        border-radius: 10px;
+    }
+
+    .lesson-intro p {
+        font-size: 15px;
+        line-height: 1.65;
+        margin-bottom: 12px;
+    }
+
+    .section-title {
+        font-size: 20px;
+        margin-bottom: 14px;
+    }
+
+    .video-section {
+        margin-bottom: 32px;
+    }
+
+    .video-container {
+        border-radius: 10px;
+    }
+
+    .video-protection-message {
+        right: 10px;
+        bottom: 10px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .materials-section {
+        gap: 18px;
+        margin-bottom: 32px;
+    }
+
+    .material-block {
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .material-header {
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+    }
+
+    .material-title {
+        font-size: 18px;
+        line-height: 1.3;
+    }
+
+    .material-badge {
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+
+    .material-item {
+        padding: 14px 0;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .material-info {
+        width: 100%;
+        gap: 11px;
+    }
+
+    .material-icon {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+        font-size: 16px;
+    }
+
+    .material-details h4 {
+        font-size: 15px;
+        line-height: 1.4;
+    }
+
+    .material-details p {
+        font-size: 13px;
+    }
+
+    .material-action {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .download-btn,
+    .link-btn {
+        width: 100%;
+        min-height: 42px;
+        padding: 9px 14px;
+        font-size: 13px;
+    }
+
+    .actions-section {
+        padding: 20px;
+        margin-bottom: 28px;
+        border-radius: 10px;
+    }
+
+    .actions-container {
+        gap: 10px;
+    }
+
+    .action-button {
+        min-height: 50px;
+        padding: 13px 15px;
+        font-size: 15px;
+        gap: 9px;
+        border-radius: 8px;
+    }
+
+    .test-results-section {
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 10px;
+    }
+
+    .test-results-section p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .upload-area {
+        padding: 24px 16px;
+        margin-top: 16px;
+        border-radius: 9px;
+    }
+
+    .upload-icon {
+        font-size: 38px;
+        margin-bottom: 14px;
+    }
+
+    .upload-text {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .upload-subtext {
+        font-size: 12px;
+        line-height: 1.5;
+        margin-bottom: 18px;
+    }
+
+    .upload-btn {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    .file-name {
+        font-size: 12px;
+    }
+
+    .no-video-card {
+        min-height: 280px;
+        padding: 35px 20px;
+        border-radius: 14px;
+    }
+
+    .no-video-icon {
+        width: 68px;
+        height: 68px;
+        margin-bottom: 18px;
+    }
+
+    .no-video-icon i {
+        font-size: 24px;
+    }
+
+    .no-video-content {
+        max-width: 100%;
+    }
+
+    .no-video-content h3 {
+        font-size: 19px;
+        margin-bottom: 9px;
+    }
+
+    .no-video-content p {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .no-video-line {
+        margin: 18px 0 14px;
+    }
+
+    .no-video-status {
+        padding: 7px 12px;
+        font-size: 11px;
+    }
+
+    .test-rejection-section {
+        margin-top: 20px;
+        margin-bottom: 28px;
+    }
+
+    .test-rejection-card {
+        border-radius: 14px;
+    }
+
+    .test-rejection-header {
+        padding: 20px;
+        gap: 12px;
+    }
+
+    .test-rejection-icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .test-rejection-icon i {
+        font-size: 18px;
+    }
+
+    .test-rejection-title h2 {
+        font-size: 18px;
+    }
+
+    .test-rejection-label {
+        font-size: 10px;
+    }
+
+    .test-rejection-badge {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .test-rejection-divider {
+        margin: 0 20px;
+    }
+
+    .test-rejection-content {
+        padding: 17px 20px 20px;
+    }
+
+    .test-rejection-message {
+        gap: 9px;
+        margin-bottom: 16px;
+        padding: 12px 13px;
+    }
+
+    .test-rejection-message p {
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .test-rejection-comment-header {
+        padding: 11px 14px;
+        font-size: 12px;
+    }
+
+    .test-rejection-comment-body {
+        padding: 15px;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+}
+
+/* =========================================
+   ТЕЛЕФОНЫ
+   ========================================= */
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 12px;
+    }
+
+    .lesson-main {
+        padding: 18px 0 30px;
+    }
+
+    .breadcrumbs {
+        margin-bottom: 16px;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .lesson-title {
+        font-size: 22px;
+        line-height: 1.25;
+        margin-bottom: 10px;
+    }
+
+    .lesson-meta {
+        font-size: 12px;
+        gap: 7px;
+    }
+
+    .lesson-intro {
+        padding: 16px;
+        margin-bottom: 22px;
+    }
+
+    .lesson-intro p {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .section-title {
+        font-size: 18px;
+        gap: 7px;
+        margin-bottom: 12px;
+    }
+
+    .video-section {
+        margin-bottom: 24px;
+    }
+
+    .video-container {
+        border-radius: 8px;
+    }
+
+    .video-protection-message {
+        display: none;
+    }
+
+    .materials-section {
+        gap: 14px;
+        margin-bottom: 24px;
+    }
+
+    .material-block {
+        padding: 16px;
+        border-radius: 9px;
+    }
+
+    .material-header {
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+
+    .material-title {
+        font-size: 16px;
+        width: 100%;
+    }
+
+    .material-title i {
+        margin-right: 0 !important;
+    }
+
+    .material-badge {
+        align-self: flex-start;
+        font-size: 10px;
+        padding: 4px 9px;
+    }
+
+    .material-item {
+        padding: 12px 0;
+        gap: 10px;
+    }
+
+    .material-info {
+        gap: 9px;
+    }
+
+    .material-icon {
+        width: 32px;
+        height: 32px;
+        flex-basis: 32px;
+        font-size: 14px;
+        border-radius: 7px;
+    }
+
+    .material-details h4 {
+        font-size: 14px;
+        line-height: 1.35;
+        margin-bottom: 0;
+    }
+
+    .material-details p {
+        font-size: 12px;
+    }
+
+    .download-btn,
+    .link-btn {
+        min-height: 40px;
+        padding: 8px 12px;
+        font-size: 12px;
+        border-width: 1px;
+        border-radius: 7px;
+    }
+
+    .actions-section {
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 9px;
+    }
+
+    .actions-container {
+        gap: 8px;
+    }
+
+    .action-button {
+        min-height: 46px;
+        padding: 11px 12px;
+        font-size: 14px;
+        gap: 7px;
+        border-radius: 7px;
+    }
+
+    .test-results-section {
+        padding: 16px;
+        margin-top: 16px;
+    }
+
+    .test-results-section p {
+        font-size: 13px;
+    }
+
+    .upload-area {
+        padding: 20px 12px;
+    }
+
+    .upload-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .upload-text {
+        font-size: 14px;
+    }
+
+    .upload-subtext {
+        font-size: 11px;
+        margin-bottom: 15px;
+    }
+
+    .upload-btn {
+        min-height: 42px;
+        font-size: 13px;
+    }
+
+    .no-video-card {
+        min-height: 240px;
+        padding: 28px 16px;
+        border-radius: 12px;
+    }
+
+    .no-video-icon {
+        width: 58px;
+        height: 58px;
+        margin-bottom: 15px;
+        box-shadow:
+            0 8px 18px rgba(13, 43, 30, 0.16),
+            0 0 0 6px rgba(201, 168, 106, 0.08);
+    }
+
+    .no-video-icon i {
+        font-size: 20px;
+    }
+
+    .no-video-content h3 {
+        font-size: 17px;
+        margin-bottom: 7px;
+    }
+
+    .no-video-content p {
+        font-size: 12px;
+        line-height: 1.55;
+    }
+
+    .no-video-line {
+        width: 45px;
+        margin: 15px 0 12px;
+    }
+
+    .no-video-status {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+
+    .test-rejection-section {
+        margin-top: 16px;
+        margin-bottom: 20px;
+    }
+
+    .test-rejection-card {
+        border-radius: 12px;
+    }
+
+    .test-rejection-header {
+        padding: 16px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .test-rejection-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .test-rejection-icon i {
+        font-size: 16px;
+    }
+
+    .test-rejection-title {
+        min-width: calc(100% - 55px);
+    }
+
+    .test-rejection-title h2 {
+        font-size: 17px;
+    }
+
+    .test-rejection-label {
+        font-size: 9px;
+    }
+
+    .test-rejection-badge {
+        margin-left: 50px;
+        padding: 5px 9px;
+        font-size: 10px;
+    }
+
+    .test-rejection-divider {
+        margin: 0 16px;
+    }
+
+    .test-rejection-content {
+        padding: 14px 16px 16px;
+    }
+
+    .test-rejection-message {
+        gap: 8px;
+        margin-bottom: 13px;
+        padding: 10px 11px;
+    }
+
+    .test-rejection-message i {
+        font-size: 13px;
+    }
+
+    .test-rejection-message p {
+        font-size: 11px;
+        line-height: 1.55;
+    }
+
+    .test-rejection-comment-header {
+        gap: 7px;
+        padding: 10px 12px;
+        font-size: 11px;
+    }
+
+    .test-rejection-comment-header i {
+        font-size: 13px;
+    }
+
+    .test-rejection-comment-body {
+        padding: 12px;
+        font-size: 12px;
+        line-height: 1.55;
+    }
+}
+
+/* =========================================
+   ОЧЕНЬ МАЛЕНЬКИЕ ЭКРАНЫ
+   ========================================= */
+
+@media (max-width: 360px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .lesson-title {
+        font-size: 20px;
+    }
+
+    .lesson-intro {
+        padding: 14px;
+    }
+
+    .lesson-intro p {
+        font-size: 13px;
+    }
+
+    .material-block {
+        padding: 14px;
+    }
+
+    .material-title {
+        font-size: 15px;
+    }
+
+    .material-details h4 {
+        font-size: 13px;
+    }
+
+    .actions-section {
+        padding: 12px;
+    }
+
+    .action-button {
+        font-size: 13px;
+    }
+
+    .test-results-section {
+        padding: 14px;
+    }
+
+    .no-video-card {
+        min-height: 220px;
+        padding: 24px 12px;
+    }
+
+    .test-rejection-header {
+        padding: 14px;
+    }
+
+    .test-rejection-content {
+        padding: 12px 14px 14px;
+    }
+}
+
+/* =========================================
+   ДОПОЛНИТЕЛЬНЫЕ ИСПРАВЛЕНИЯ
+   ========================================= */
+
+@media (max-width: 768px) {
+    .fa-exclamation-circle,
+    .fa-star {
+        margin-right: 0 !important;
+    }
+
+    .material-header h3 {
+        word-break: break-word;
+    }
+
+    .actions-container form {
+        width: 100%;
+    }
+
+    .actions-container .action-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .material-title {
+        align-items: flex-start;
+    }
+
+    .material-title br {
+        display: none;
+    }
+}

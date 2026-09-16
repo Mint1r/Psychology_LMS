@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Школа практической психологии и медиации</title>
+    <link rel="stylesheet" href="{%static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/learn_main.css'%}">
+    <link rel="stylesheet" href="{% static 'css/learn_header.css'%}">
+</head>
+<style>
+            * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            src: url('{% static 'fonts/Segoe UI.ttf'%}') format('truetype');
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+</style>
+
+<body>
+    <!-- Шапка -->
+    {% include 'includes/header_l.html' %}
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Приветственный баннер -->
+            <section class="welcome-section">
+                <h1>Добро пожаловать в школу практической психологии!</h1>
+                <p>Профессиональная подготовка психологов и медиаторов. Дистанционное обучение с поддержкой на всех этапах — от поступления до начала практики.</p>
+            </section>
+            <!-- Блок "Мои курсы" -->
+            <section class="courses-section">
+                <h2 class="section-title">Мои курсы</h2>
+
+                {% if progress2%} 
+                    {% for progress in progress2%}
+                    <div class="courses-container">
+                        <!-- Карточка курса - Вариант 1 -->
+                        <div class="course-card-1">
+                            <div class="course-image-1">
+                                <img src="{{progress.course.image.url}}" alt="{{progress.course.title}} баннер">
+                            </div>
+                            <div class="course-content-1">
+                                <h3 class="course-title-1">{{progress.course.title}}</h3>
+                                <p class="course-description-1">{{progress.course.short_description}}</p>
+                                <div class="course-progress-1" >
+                                    <div class="progress-bar-1">
+                                        <div class="progress-fill-1" style="width: {{progress.percent}}%;"></div>
+                                    </div>
+                                    <div class="progress-text-1">
+                                        <span>Прогресс </span>
+                                        <span> {{progress.percent}}%</span>
+                                    </div>
+                                </div>
+                                
+                                <a href="{%url 'learn:learn_course' progress.course.id %}" class="course-button-1">Перейти к учебе</a>
+                            </div>
+                        </div>
+                        {% endfor%}
+
+                {%else%}
+                           <!-- Заглушка: Нет курсов -->
+                        <div class="no-courses-container">
+                            <div class="no-courses-card">
+                                <div class="no-courses-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                        <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="no-courses-title">У вас пока нет активных курсов</h3>
+                                <p class="no-courses-description">
+                                    Вы еще не записаны ни на один курс. Изучите наш каталог и начните обучение уже сегодня!
+                                </p>
+                                <div class="no-courses-actions">
+                                    <a href="{% url 'catalog' %}" class="no-courses-btn-primary">Перейти в каталог курсов</a>
+                                </div>
+                                <div class="no-courses-tip">
+                                    <span class="tip-icon">💡</span>
+                                    <span>После покупки курса он появится в этом разделе</span>
+                                </div>
+                            </div>
+                        </div>
+
+                {% endif %}
+            </section>
+
+            <!-- Блок со статистикой -->
+             <!--
+            <section class="stats-section">
+                <h2 class="section-title">Ваша учебная статистика</h2>
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="stat-number">3</div>
+                        <div class="stat-text">Активных курса</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-number">48</div>
+                        <div class="stat-text">Часов обучения</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-number">12</div>
+                        <div class="stat-text">Завершенных модулей</div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="stat-number">7</div>
+                        <div class="stat-text">Дней подряд</div>
+                    </div>
+                </div>
+            </section>
+
+        
+    </main>
+    -->
+    </div>
+    <!-- Футер -->
+    {% include 'includes/footer_l.html' %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Простая анимация появления элементов при загрузке
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.course-card-1, .course-card-2, .stat-item, .upcoming-item');
+                
+                elements.forEach((element, index) => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.2;
+                    
+                    if (elementPosition < screenPosition) {
+                        setTimeout(() => {
+                            element.style.opacity = '1';
+                            element.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    }
+                });
+            };
+            
+            // Установка начального состояния для анимации
+            document.querySelectorAll('.course-card-1, .course-card-2, .stat-item, .upcoming-item').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            // Запуск анимации при загрузке
+            setTimeout(animateOnScroll, 300);
+            
+            // Запуск анимации при прокрутке
+            window.addEventListener('scroll', animateOnScroll);
+            
+            // Обработка клика по аватару пользователя
+            document.querySelector('.user-profile').addEventListener('click', function() {
+                alert('Переход в личный кабинет пользователя');
+                // В реальном приложении здесь будет переход на страницу профиля
+                // window.location.href = '/profile/';
+            });
+            
+        });
+    </script>
+</body>
+
+</html>

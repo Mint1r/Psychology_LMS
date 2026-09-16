@@ -1,0 +1,206 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас | Школа практической психологии и медиации</title>
+    <link rel="stylesheet" href="{%static 'fontawesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/info.css'%}">
+    <link rel="stylesheet" href="{% static 'css/footer.css'%}">
+    <link rel="stylesheet" href="{% static 'css/header.css'%}">
+            <style>
+    h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            src: url('{% static 'fonts/PlayfairDisplay.ttf'%}') format('truetype');
+            font-weight: 550;
+            margin-bottom: 1.2rem;
+            color: var(--primary-dark);
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Хедер будет здесь -->
+    {% include 'includes/header.html' %}
+    <main class="about-page">
+        <section class="about-hero">
+            <div class="container">
+                <h1 class="page-title">О нашей школе</h1>
+                <p class="page-subtitle"><span class="school-name">Школа практической психологии и медиации</span> — ведущее образовательное учреждение, где профессиональное развитие становится образом жизни</p>
+            </div>
+        </section>
+        
+        <section class="about-content">
+            <div class="container">
+                <div class="about-section">
+                    <h2 class="section-title">Наша специализация</h2>
+                    <p>Мы создаем образовательные программы, которые меняют карьерные траектории и открывают новые профессиональные горизонты в сфере психологии и медиации.</p>
+                    
+                    <div class="specialization-grid">
+                        <div class="spec-card">
+                            <div class="spec-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Повышение квалификации</h3>
+                            <p>Программы для практикующих специалистов, желающих углубить свои знания, освоить современные методы работы и соответствовать актуальным профессиональным стандартам. Обновление компетенций под руководством экспертов-практиков.</p>
+                        </div>
+                        
+                        <div class="spec-card">
+                            <div class="spec-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <h3>Профессиональная переподготовка</h3>
+                            <p>Комплексные программы для получения новой профессии психолога или медиатора с нуля. Системное обучение с дипломом государственного образца, дающим право на ведение профессиональной деятельности.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="motivation-section">
+                    <h3 class="motivation-title">Наша философия: образование как путь к мастерству</h3>
+                    <div class="motivation-text">
+                        <p>Мы убеждены, что настоящее профессиональное образование — это синтез глубоких теоретических знаний и бесценного практического опыта. Наша миссия — готовить не просто специалистов, а мастеров своего дела, способных решать сложные задачи и влиять на качество жизни людей.</p>
+                        <p>Каждая программа в нашей школе — это результат глубокого анализа темы и сотен часов работы. Мы постоянно обновляем учебные материалы, следим за мировыми тенденциями в психологии и медиации, интегрируя лучшее в образовательный процесс.</p>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="consultationBtn">
+                        <i class="fas fa-phone-alt mr-2"></i> Получить консультацию
+                    </button>
+                </div>
+                
+                
+                <div class="about-section">
+                    <h2 class="section-title">Официальная регистрация и аккредитация РФ</h2>
+                    <p>Мы работаем в полном соответствии с законодательством Российской Федерации в сфере образования. Все программы лицензированы, а выпускники получают документы государственного образца, признаваемые по всей стране.</p>
+                    
+                    <div class="accreditation-grid">
+                        <div class="accreditation-card">
+                            <div class="accreditation-icon">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <h3>Государственная лицензия</h3>
+                            <p>Деятельность школы осуществляется на основании лицензии № Л035-01234 от 15.03.2020, выданной Департаментом образования и науки города Москвы. Лицензия подтверждает право на осуществление образовательной деятельности.</p>
+                            <p class="p-award">Важно! Некоторые из представленных курсов авторские и не приравниваются к дипломам государственого образца, внимательно смотри описание курса.</p>
+                        </div>
+                        
+                        <div class="accreditation-card">
+                            <div class="accreditation-icon">
+                                <i class="fas fa-award"></i>
+                            </div>
+                            <h3>Соответствие стандартам ФГОС</h3>
+                            <p>Наши образовательные программы разработаны в соответствии с федеральными государственными образовательными стандартами (ФГОС) и профессиональными стандартами в области психологии и медиации.</p>
+                        </div>
+                        
+                        <div class="accreditation-card">
+                            <div class="accreditation-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>Регистрация в федеральном реестре</h3>
+                            <p>Все выданные дипломы и удостоверения регистрируются в федеральном реестре сведений о документах об образовании (ФИС ФРДО), что гарантирует их подлинность и признание по всей территории РФ.</p>
+                            <p class="p-award">Важно! Некоторые из представленных курсов авторские и не приравниваются к дипломам государственого образца, внимательно смотри описание курса.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="document-section">
+                    <h3 class="document-title">Образец документа об окончании</h3>
+                    <p>Выпускники нашей школы, закончавшие обучения на сертифицированных програмах, получают официальный документ установленного образца, который дает право на ведение профессиональной деятельности и признается работодателями по всей России.</p>
+                    
+                    <div class="document-image">
+                        <!-- Замените src на реальное изображение диплома -->
+                        <img src="https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Образец диплома Школы практической психологии и медиации">
+                    </div>
+                    
+                    <p class="document-note">Образец диплома о профессиональной переподготовке. Реальный документ содержит защитные элементы, серию и номер, QR-код для проверки подлинности в федеральном реестре, а также все необходимые подписи и печати.</p>
+                    
+                    <button class="btn btn-primary" id="catalogBtn">
+                        <i class="fas fa-book-open mr-2"></i> Смотреть все курсы
+                    </button>
+                </div>
+            </div>
+        </section>
+
+                <button class="btn btn-secondary" id="callbackBtnHero">
+                    <i class="fas fa-phone-alt mr-2"> </i>  Бесплатная консультация
+                </button>
+
+    </main>
+    
+    <!-- Футер будет здесь -->
+    {% include 'includes/footer.html' %}
+    {% include 'includes/modal_call.html' %}
+    
+    <script>
+        // Анимация статистики
+        document.addEventListener('DOMContentLoaded', function() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            // Функция для форматирования чисел
+            function animateNumbers() {
+                statNumbers.forEach(stat => {
+                    const originalText = stat.textContent;
+                    const target = parseInt(originalText);
+                    const hasPlus = originalText.includes('+');
+                    let current = 0;
+                    const increment = target / 40;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            stat.textContent = target + (hasPlus ? '+' : '');
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(current) + (hasPlus ? '+' : '');
+                        }
+                    }, 40);
+                });
+            }
+            
+            // Запуск анимации при скролле
+            const statsSection = document.querySelector('.stats-section');
+            if (statsSection) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animateNumbers();
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.3 });
+                
+                observer.observe(statsSection);
+            }
+            
+            // Анимация появления элементов
+            const cards = document.querySelectorAll('.spec-card, .accreditation-card');
+            
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(25px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 150 + index * 150);
+            });
+            
+            // Обработчики кнопок
+            const consultationBtn = document.getElementById('consultationBtn');
+            if (consultationBtn) {
+                consultationBtn.addEventListener('click', function() {
+                    alert('Открывается форма для консультации. В реальном приложении здесь будет модальное окно или переход.');
+                });
+            }
+            
+            const catalogBtn = document.getElementById('catalogBtn');
+            if (catalogBtn) {
+                catalogBtn.addEventListener('click', function() {
+                    window.location.href = '/catalog/';
+                });
+            }
+        });
+    </script>
+
+    <script src="{% static 'js/modal_call.js' %}"></script>
+</body>
+</html>

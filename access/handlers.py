@@ -1,6 +1,5 @@
 from django.core.mail import send_mail
-from courses.models import CourseModule,Lesson
-from progress.models import UserLessonProgress
+from courses.models import CourseModule
 from Psychology import settings 
 from vkbot import services as bot
 
@@ -21,7 +20,7 @@ def get_lessons_dict(course,user_progress):
             if lesson_number <= user_progress.current_class:
                 lessons_dict.append(
                     {"module_order":module.order,
-                    "lesson": module_lesson,
+                    "module_lesson": module_lesson,
                     'lesson_number':lesson_number,
                     "lesson_id":module_lesson.lesson_id
                     })
@@ -31,72 +30,6 @@ def get_lessons_dict(course,user_progress):
 
         if flag: break
     return lessons_dict
-
-
-
-def update_user_course_progress(course, user_progress, user):
-
-    """
-    Обновляет UserProgress при прохождении урока.
-    """
-
-    user_progress.current_class += 1
-    user_progress.save()
-
-    lesson_all_cnt = UserLessonProgress.objects.filter(
-        lesson__modules__courses=course,
-        user=user,
-    ).count()
-
-    finished = UserLessonProgress.objects.filter(
-        user=user,
-        lesson__modules__courses=course,
-        status="finished"
-    ).count()
-
-
-    if finished == lesson_all_cnt and user_progress.status != "finished":
-        user_progress.status = "finished"
-        user_progress.current_class = 1000
-        user_progress.save()
-
-        course_finish_aply(
-            user.username,
-            user.phon_number,
-            course.title
-        )
-
-        return True
-
-
-    lesson_progresses = {
-        p.lesson_id: p
-        for p in UserLessonProgress.objects.filter(user=user)
-    }
-
-    
-    while True:
-        lessons_dict = get_lessons_dict(
-            course=course,
-            user_progress=user_progress
-        )
-
-        if not lessons_dict:
-            break
-
-        lesson_id = lessons_dict[-1]["lesson_id"]
-        progress = lesson_progresses.get(lesson_id)
-
-        if not progress or progress.status != "finished":
-            break
-
-        user_progress.current_class += 1
-        user_progress.save()
-       
-
-    return True
-
-
 
 
 def send_email2(topic,text,emailDict):

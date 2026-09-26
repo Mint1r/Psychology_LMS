@@ -18,10 +18,6 @@ def register(request):
 @require_POST
 def user_create(request):
 
-    """""
-    Create new user or return errors
-    """""
-
     username = request.POST.get("username")
     phon = request.POST.get("phon_number")
     request.session['form_data'] = {
@@ -110,6 +106,10 @@ def upload_documents(request,id):
 
     old_record = UserDocuments.objects.filter(user=request.user).first()
     if old_record:
+        old_record.diploma.delete(save=False) 
+        old_record.passport_main.delete(save=False) 
+        old_record.passport_registration.delete(save=False) 
+        old_record.snils.delete(save=False) 
         old_record.delete()
 
     form = UserDocumentsForm(request.POST,request.FILES)

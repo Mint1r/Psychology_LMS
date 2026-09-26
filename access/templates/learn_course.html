@@ -55,8 +55,8 @@
                             <div class="lesson-number-2">Урок {{lesson.lesson_number}}</div>
                         </div>
                         <div class="lesson-content-2">
-                            <h3 class="lesson-title-2">{{lesson.lesson.lesson.title}}</h3>
-                            <p class="lesson-description-2">{{lesson.lesson.lesson.description}}</p>
+                            <h3 class="lesson-title-2">{{lesson.module_lesson.lesson.title}}</h3>
+                            <p class="lesson-description-2">{{lesson.module_lesson.lesson.description}}</p>
                             <a href="{%url 'learn:learn_lesson' course.id lesson.lesson_id %}"><button class="lesson-button-2">Перейти к уроку</button></a>
                         </div> 
                     </div>

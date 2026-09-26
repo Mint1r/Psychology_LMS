@@ -183,5 +183,6 @@ class UserTests(models.Model):
     )
 
     class Meta:
+        ordering = ['-created_at']
         verbose_name = 'Тест пользователя'
         verbose_name_plural = 'Тесты пользователей'

@@ -3,14 +3,14 @@ from courses.models import Course, CourseModule, Module, ModuleLesson, Lesson
 from accounts.models import User, UserDocuments, UserTests
 from access.views import get_lessons_dict
 from django.urls import reverse
-from progress.models import UserLessonProgress, UserProgress
+from progress.models import UserLessonProgress, UserProgress, UserModulProgress
 from django.contrib.auth.models import Group
 from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import Mock, patch
 from io import BytesIO
 from PIL import Image
 from django.contrib.messages import get_messages
-from access.handlers import update_user_course_progress
+from progress.services import update_user_course_progress
 
 @pytest.mark.django_db
 def test_get_lessons_dict():
@@ -86,7 +86,7 @@ def test_get_lessons_dict():
     assert len(result) == 3
 
     assert result[0]["module_order"] == 1
-    assert result[0]["lesson"] == module_1.module_lessons.get(
+    assert result[0]["module_lesson"] == module_1.module_lessons.get(
         lesson=lesson_1
     )
     assert result[0]["lesson_id"] == lesson_1.id
@@ -122,7 +122,6 @@ def test_learn_course_increments_progress(client, user):
         status="started",
     )
 
-
     CourseModule.objects.create(
         course=course,
         module=module,
@@ -147,6 +146,11 @@ def test_learn_course_increments_progress(client, user):
         status="finished",
     )
 
+    UserModulProgress.objects.create(
+        user=user,
+        modul=module,
+    )
+
     UserLessonProgress.objects.create(
         user=user,
         lesson=lesson2,
@@ -163,6 +167,7 @@ def test_learn_course_increments_progress(client, user):
 
     assert user_progress.current_class == 2
 
+
 @pytest.mark.django_db
 def test_learn_course_finish_course(client, user, django_capture_on_commit_callbacks):
     client.force_login(user)
@@ -174,8 +179,12 @@ def test_learn_course_finish_course(client, user, django_capture_on_commit_callb
     module = Module.objects.create(
         title="Module 1"
     )
+
     lesson1 = Lesson.objects.create(
         title="Lesson 1"
+    )
+    lesson2 = Lesson.objects.create(
+        title="Lesson 2"
     )
 
     user_progress = UserProgress.objects.create(
@@ -190,6 +199,16 @@ def test_learn_course_finish_course(client, user, django_capture_on_commit_callb
         lesson=lesson1,
         status="finished",
     )
+    UserLessonProgress.objects.create(
+        user=user,
+        lesson=lesson2,
+        status="finished",
+    )
+
+    UserModulProgress.objects.create(
+        user=user,
+        modul=module,
+    )
 
     CourseModule.objects.create(
         course=course,
@@ -202,8 +221,13 @@ def test_learn_course_finish_course(client, user, django_capture_on_commit_callb
         lesson=lesson1,
         order=1
     )
+    ModuleLesson.objects.create(
+        module=module,
+        lesson=lesson2,
+        order=2
+    )
 
-    with patch('access.handlers.course_finish_aply') as fake_send_aply:
+    with patch('progress.services.course_finish_aply') as fake_send_aply:
         with django_capture_on_commit_callbacks(execute=True):
             update_user_course_progress(
                 course = course,
@@ -319,7 +343,7 @@ def test_applications_accept(client, user,django_capture_on_commit_callbacks):
 
     client.force_login(user)
 
-    with patch('access.handlers.send_mail') as fake_send_mail:
+    with patch('access.views.send_email2') as fake_send_mail:
         with django_capture_on_commit_callbacks(execute=True):
             response = client.post(
                 reverse("learn:applications"),
@@ -374,7 +398,7 @@ def test_applications_reject(client, user,django_capture_on_commit_callbacks):
     )
 
     client.force_login(user)
-    with patch('access.handlers.send_mail') as fake_send_mail:
+    with patch('access.views.send_email2') as fake_send_mail:
         with django_capture_on_commit_callbacks(execute=True):
             response = client.post(
                 reverse("learn:applications"),
@@ -498,8 +522,13 @@ def test_complite_lesson(client, user):
     module = Module.objects.create(
         title="Python Module"
     )
+
     lesson1 = Lesson.objects.create(
         title="Lesson 1"
+    )
+        
+    lesson2 = Lesson.objects.create(
+        title="Lesson 2"
     )
 
     CourseModule.objects.create(
@@ -508,18 +537,33 @@ def test_complite_lesson(client, user):
         order=1
     )
 
-
     ModuleLesson.objects.create(
         module=module,
         lesson=lesson1,
         order=1
     )
-    
+
+    ModuleLesson.objects.create(
+        module=module,
+        lesson=lesson2,
+        order=2
+    )
 
     UserLessonProgress.objects.create(
         user=user,
         lesson=lesson1,
         status="started",
+    )
+
+    UserLessonProgress.objects.create(
+        user=user,
+        lesson=lesson2,
+        status="started",
+    )
+
+    UserModulProgress.objects.create(
+        user=user,
+        modul=module,
     )
 
     progress = UserProgress.objects.create(
@@ -558,6 +602,10 @@ def test_test_decision(client, user,django_capture_on_commit_callbacks):
         content_type="image/jpeg",
     )
 
+    module = Module.objects.create(
+        title="Python Module"
+    )
+
     course =Course.objects.create(
         title="Python Course"   
     )
@@ -568,16 +616,50 @@ def test_test_decision(client, user,django_capture_on_commit_callbacks):
         title="Lesson 1"
     )
 
+    lesson2 = Lesson.objects.create(
+        title="Lesson 2"
+    )
+
     test = UserTests.objects.create(
         user = user,
         lesson = lesson1,
         test_results = image,
         course_id = course.id
     )
+    
+    CourseModule.objects.create(
+        course=course,
+        module=module,
+        order=1
+    )
+
     progress = UserLessonProgress.objects.create(
         user=user,
         lesson=lesson1,
         status="started",
+    )
+
+    UserLessonProgress.objects.create(
+        user=user,
+        lesson=lesson2,
+        status="started",
+    )
+    
+    UserModulProgress.objects.create(
+        user=user,
+        modul=module,
+    )
+
+    ModuleLesson.objects.create(
+        module=module,
+        lesson=lesson1,
+        order=1
+    )
+
+    ModuleLesson.objects.create(
+        module=module,
+        lesson=lesson2,
+        order=2
     )
 
     user_progress = UserProgress.objects.create(
@@ -601,10 +683,6 @@ def test_test_decision(client, user,django_capture_on_commit_callbacks):
                 HTTP_REFERER="/some-page/",
             )
 
-            print("callbacks:", call)
-            print("response:", response.status_code)
-        
-        print("mock calls:", fake_send_mail.call_args_list)
         fake_send_mail.assert_called_once()
 
     progress.refresh_from_db()

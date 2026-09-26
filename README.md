@@ -170,8 +170,6 @@ Webhook
 Перед запуском тестов установите в .env:
 
 PAYMENT=True
-VK_MESSAGES=True
-EMAIL_MESSAGES=True
 
 Для тестирования используется `pytest` и `pytest-django`.
 

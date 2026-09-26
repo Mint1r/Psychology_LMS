@@ -10,7 +10,8 @@ from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 from django.db import transaction
-from access.handlers import update_user_course_progress,get_lessons_dict, send_email2
+from access.handlers import get_lessons_dict, send_email2
+from progress.services import update_user_course_progress
 
 @login_required
 def learn_main(request):
@@ -49,15 +50,16 @@ def learn_lesson(request,lesson_id,course_id):
         user = request.user,
         lesson=lesson
         )
+    
     module_lesson = ModuleLesson.objects.get(
         module__coursemodule__course=course,
         lesson=lesson,
     )
 
     module_course= CourseModule.objects.get(
-        course=course,module=module_lesson.module)
+        course=course,module=module_lesson.module_id)
     
-    test = UserTests.objects.filter(user=request.user,lesson=lesson, course = course_id).last()  
+    test = UserTests.objects.filter(user=request.user,lesson=lesson, course = course_id).first()  
     test_status = test.status if test else 0
     rejection_reason = test.rejection_reason if test else None
     video = lesson.video
@@ -69,7 +71,7 @@ def learn_lesson(request,lesson_id,course_id):
         "lesson_order":module_lesson.order,
         "module_order": module_course.order,
         "test_status":test_status,
-        "test":lesson.test,
+        "test":test,
         "test_coment":rejection_reason,
         "lesson_status":lesson_progress.status,
     }
@@ -107,7 +109,7 @@ def applications(request):
         if action == "accept":
             application.status ="approved"
             application.user.groups.add(group)
-            application.save()
+            
             text = 'Добрый день, ваши документы прошли проверку и вы можете продолжить покупку'
             topic = 'Проверка документов'
             transaction.on_commit( 
@@ -118,16 +120,15 @@ def applications(request):
                         )
         else:
             application.status ="rejected"
-            application.save()
             text = 'Добрый день, ваши документы не прошли проверку, попробуйте прикрепить их снова.'
             topic = 'Проверка документов'
             transaction.on_commit( 
                 lambda : send_email2(
                         topic = topic, 
-                        text = text, 
+                      text = text, 
                         emailDict = [application.user.email])
                         )
-    
+        application.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
 
@@ -143,20 +144,13 @@ def load_test(request, course_id, lesson_id):
         messages.info(request, f"Нет файла")
         return redirect('learn:learn_lesson',course_id, lesson_id)
     
-    try:
-        test2,created = UserTests.objects.get_or_create(
-            user=request.user,
-            test_results = test_file,
-            lesson = lesson,
-            course = course
-        )
-        test2.status = "processing"
-        test2.save()
-        
-    except Exception as e:
-        messages.error(request, f"Произошла ошибка при загрузке теста, попробуйте снова")
-        return redirect('learn:learn_lesson',course_id, lesson_id)
-        #поправить
+    test = UserTests.objects.create(
+        user=request.user,
+        test_results = test_file,
+        lesson = lesson,
+        course = course
+    )
+
     return redirect('learn:learn_course', course_id)
 
 
@@ -194,7 +188,7 @@ def test_decision(request):
                         text = text, 
                         emailDict = [student.email])
                         )
-            lesson_progres.save()
+            lesson_progres.save(update_fields=["status", "updated_at"])
             update_user_course_progress(
                 course = test.course,
                 user_progress = user_progress,
@@ -212,7 +206,9 @@ def test_decision(request):
                         text = text, 
                         emailDict = [student.email])
                         )
-        test.save()
+            
+        test.test_results.delete(save=False) 
+        test.save(update_fields=["status", "rejection_reason"])
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
     
@@ -224,24 +220,24 @@ def complit_lesson(request,course_id,lesson_id):
     course = get_object_or_404(Course, id = course_id)
     lesson_progres = get_object_or_404(
         UserLessonProgress,
+        user=request.user,
         lesson=lesson,
-        user=request.user
         )
     user_progress = get_object_or_404(
         UserProgress,
+        user=request.user,
         course=course_id,
-        user=request.user
         )
     
     lesson_progres.status = "finished"
-    lesson_progres.save()
+    lesson_progres.save(update_fields=["status", "updated_at", 'finished_at'])
 
     update_user_course_progress(
         course = course,
         user_progress = user_progress,
         user = request.user
         )
+    
     return redirect('learn:learn_lesson',course_id,lesson_id )
-
 
 

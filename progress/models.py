@@ -57,6 +57,13 @@ class UserProgress(models.Model):
         verbose_name = 'Доступ к курсам'
         verbose_name_plural = 'Доступ к курсам'
         ordering = ['-created_at']
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'course'],
+                name='unique_user_course_progress',
+            ),
+        ]
     
     def percent(self):
         now = self.current_class -1
@@ -75,7 +82,7 @@ class UserLessonProgress(models.Model):
     user = models.ForeignKey(
         User, 
         on_delete=models.CASCADE,
-        related_name='user_module_progress',
+        related_name='user_lesson_progress',
         verbose_name='Пользователь'
     )
 
@@ -119,6 +126,13 @@ class UserLessonProgress(models.Model):
         verbose_name = 'Прохождение урока'
         verbose_name_plural = 'Прохождение урока'
         ordering = ['-created_at']
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'lesson'],
+                name='unique_user_lesson_progress',
+            ),
+        ]
 
     def __str__(self):
         return f'Пользователь {self.user.username}'

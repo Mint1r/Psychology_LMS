@@ -19,7 +19,7 @@ def documents(request):
     data = {"data":docs}
     return render(request, 'docs_main.html',data)
 
-def catlog(request):
+def catolog(request):
     courses = Course.objects.all()
     data={
         'courses':courses
@@ -29,12 +29,16 @@ def catlog(request):
 def course(request,course_id):
     has_course = False
     purchase_error = False
+    
     for message in messages.get_messages(request):
         if message.tags == 'error':
             purchase_error = True
+
     course = get_object_or_404(Course,id=course_id)
+
     if request.user.is_authenticated:
         has_course = UserProgress.objects.filter(user = request.user, course = course).exists()
+
     data={
         'course':course,
         'has_course': has_course,

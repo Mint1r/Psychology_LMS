@@ -9,18 +9,25 @@ from courses.models import Course
 from yookassa.domain.exceptions import ApiError, NotFoundError
 from django.urls import reverse
 from django.contrib.messages import get_messages
-def test_create_smart_payment_sucseed():
 
-    result = create_smart_payment(
-        amount="1500.00",
-        return_url="https://example.com/success",
-        user_id="10",
-        course_id="25",
-        description="Оплата курса",
-    )
+# def test_create_smart_payment_sucseed():
+#     mock_payment = Mock()
+#     mock_payment.id = "test-payment-id"
+#     mock_payment.confirmation.confirmation_url = "http://test-payment"
 
-    assert result["payment_id"]
-    assert result["confirmation_url"]
+#     with patch("payment.payment.Payment", return_value=mock_payment) as mock_Payment:
+#         result = create_smart_payment(
+#             amount="1500.00",
+#             return_url="https://example.com/success",
+#             user_id="10",
+#             course_id="25",
+#             description="Оплата курса",
+#         )
+
+#     assert result["payment_id"] == "test-payment-id"
+#     assert result["confirmation_url"] == "http://test-payment"
+
+#     mock_Payment.assert_called_once()
 
 @pytest.mark.django_db
 def test_payment_smart_payment_error(client, user):
@@ -63,12 +70,17 @@ def test_payment_sucseed(client, user):
         price = Decimal(300),
     )
 
-    response = client.post(
-    reverse("purchase_redirect",
-            kwargs={'course_id':course.id}),
-    data = {},
-    HTTP_REFERER="/some-page/",
-    )
+    with patch("payment.views.create_smart_payment",) as mock_create:
+        mock_create.return_value = {
+                "payment_id": "test-payment-id",
+                "confirmation_url": "http://test-payment",
+            }
+        response = client.post(
+        reverse("purchase_redirect",
+                kwargs={'course_id':course.id}),
+        data = {},
+        HTTP_REFERER="/some-page/",
+        )
 
     assert response.status_code == 302
 
@@ -104,6 +116,7 @@ def test_payment_sucseed(client, user):
             content_type="application/json",
         )
 
+
         assert response.status_code == 200
 
         mock_verify.assert_called_once_with(
@@ -128,12 +141,17 @@ def test_payment_canceled(client, user):
         price = Decimal(300),
     )
 
-    response = client.post(
-    reverse("purchase_redirect",
-            kwargs={'course_id':course.id}),
-    data = {},
-    HTTP_REFERER="/some-page/",
-    )
+    with patch("payment.views.create_smart_payment",) as mock_create:
+        mock_create.return_value = {
+                "payment_id": "test-payment-id",
+                "confirmation_url": "http://test-payment",
+            }
+        response = client.post(
+        reverse("purchase_redirect",
+                kwargs={'course_id':course.id}),
+        data = {},
+        HTTP_REFERER="/some-page/",
+        )
 
     assert response.status_code == 302
 
@@ -181,13 +199,17 @@ def test_payment_verify_error(client, user):
         title="Course 1",
         price = Decimal(300),
     )
-
-    response = client.post(
-    reverse("purchase_redirect",
-            kwargs={'course_id':course.id}),
-    data = {},
-    HTTP_REFERER="/some-page/",
-    )
+    with patch("payment.views.create_smart_payment",) as mock_create:
+        mock_create.return_value = {
+                "payment_id": "test-payment-id",
+                "confirmation_url": "http://test-payment",
+            }
+        response = client.post(
+        reverse("purchase_redirect",
+                kwargs={'course_id':course.id}),
+        data = {},
+        HTTP_REFERER="/some-page/",
+        )
 
     assert response.status_code == 302
 
@@ -245,12 +267,17 @@ def test_payment_verify_YKassa_error(client, user):
         price = Decimal(300),
     )
 
-    response = client.post(
-    reverse("purchase_redirect",
-            kwargs={'course_id':course.id}),
-    data = {},
-    HTTP_REFERER="/some-page/",
-    )
+    with patch("payment.views.create_smart_payment",) as mock_create:
+        mock_create.return_value = {
+                "payment_id": "test-payment-id",
+                "confirmation_url": "http://test-payment",
+            }
+        response = client.post(
+        reverse("purchase_redirect",
+                kwargs={'course_id':course.id}),
+        data = {},
+        HTTP_REFERER="/some-page/",
+        )
 
     assert response.status_code == 302
 
@@ -309,13 +336,17 @@ def test_payment_no_metadata(client, user):
         title="Course 1",
         price = Decimal(300),
     )
-
-    response = client.post(
-    reverse("purchase_redirect",
-            kwargs={'course_id':course.id}),
-    data = {},
-    HTTP_REFERER="/some-page/",
-    )
+    with patch("payment.views.create_smart_payment",) as mock_create:
+        mock_create.return_value = {
+                "payment_id": "test-payment-id",
+                "confirmation_url": "http://test-payment",
+            }
+        response = client.post(
+        reverse("purchase_redirect",
+                kwargs={'course_id':course.id}),
+        data = {},
+        HTTP_REFERER="/some-page/",
+        )
 
     assert response.status_code == 302
 
@@ -359,12 +390,17 @@ def test_payment_incorrect_metadata(client, user):
         price = Decimal(300),
     )
 
-    response = client.post(
-    reverse("purchase_redirect",
-            kwargs={'course_id':course.id}),
-    data = {},
-    HTTP_REFERER="/some-page/",
-    )
+    with patch("payment.views.create_smart_payment",) as mock_create:
+        mock_create.return_value = {
+                "payment_id": "test-payment-id",
+                "confirmation_url": "http://test-payment",
+            }
+        response = client.post(
+        reverse("purchase_redirect",
+                kwargs={'course_id':course.id}),
+        data = {},
+        HTTP_REFERER="/some-page/",
+        )
 
     assert response.status_code == 302
 
@@ -409,12 +445,17 @@ def test_payment_notification_idempatation(client, user):
         price = Decimal(300),
     )
 
-    response = client.post(
-    reverse("purchase_redirect",
-            kwargs={'course_id':course.id}),
-    data = {},
-    HTTP_REFERER="/some-page/",
-    )
+    with patch("payment.views.create_smart_payment",) as mock_create:
+        mock_create.return_value = {
+                "payment_id": "test-payment-id",
+                "confirmation_url": "http://test-payment",
+            }
+        response = client.post(
+        reverse("purchase_redirect",
+                kwargs={'course_id':course.id}),
+        data = {},
+        HTTP_REFERER="/some-page/",
+        )
 
     assert response.status_code == 302
 

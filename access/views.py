@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.models import Group
 from progress.models import UserProgress,UserLessonProgress
 from courses.models import Course,CourseModule,ModuleLesson,Lesson
+from access.models import CourseAccess
 from django.contrib import messages
 from django.views.decorators.cache import never_cache
 from django.shortcuts import get_object_or_404
@@ -28,8 +29,20 @@ def learn_main(request):
 def learn_course(request,course_id):
 
     course = get_object_or_404(Course,pk=course_id)
-    user_progres=get_object_or_404(UserProgress,user=request.user, course=course) 
 
+    get_object_or_404(
+        CourseAccess,
+        user=request.user, 
+        course=course, 
+        status = CourseAccess.Status.ACTIVE
+        )
+    
+    user_progres=get_object_or_404(
+        UserProgress,
+        user=request.user, 
+        course=course
+        ) 
+    
 
     lessons_dict = get_lessons_dict(course,user_progres)
 
@@ -43,21 +56,29 @@ def learn_course(request,course_id):
 
 @login_required
 def learn_lesson(request,lesson_id,course_id):
-    course = get_object_or_404(Course, pk=course_id)
-    lesson = get_object_or_404(Lesson, pk=lesson_id)
-    lesson_progress = get_object_or_404(
-        UserLessonProgress,
-        user = request.user,
-        lesson=lesson
+    access = get_object_or_404(
+        CourseAccess.objects.select_related("course"),
+        user=request.user, 
+        course_id=course_id, 
+        status = CourseAccess.Status.ACTIVE
         )
+    course = access.course
+
+    lesson_progress = get_object_or_404(
+        UserLessonProgress.objects.select_related("lesson"),
+        user = request.user,
+        lesson_id=lesson_id
+        )
+    lesson = lesson_progress.lesson
     
-    module_lesson = ModuleLesson.objects.get(
+    module_lesson = ModuleLesson.objects.select_related('module').get(
         module__coursemodule__course=course,
         lesson=lesson,
     )
 
     module_course= CourseModule.objects.get(
-        course=course,module=module_lesson.module_id)
+        course_id=course_id,
+        module_id=module_lesson.module_id)
     
     test = UserTests.objects.filter(user=request.user,lesson=lesson, course = course_id).first()  
     test_status = test.status if test else 0
@@ -135,8 +156,13 @@ def applications(request):
 @require_POST
 @login_required
 def load_test(request, course_id, lesson_id):
-    lesson = get_object_or_404(Lesson, id = lesson_id)
-    course = get_object_or_404(Course, id = course_id)
+    lesson = get_object_or_404(Lesson, id = lesson_id, modules__courses = course_id)
+    get_object_or_404(
+        CourseAccess,
+        user=request.user, 
+        course_id=course_id, 
+        status = CourseAccess.Status.ACTIVE
+        )
     
     test_file = request.FILES.get('test_file')
     
@@ -144,11 +170,11 @@ def load_test(request, course_id, lesson_id):
         messages.info(request, f"Нет файла")
         return redirect('learn:learn_lesson',course_id, lesson_id)
     
-    test = UserTests.objects.create(
+    UserTests.objects.create(
         user=request.user,
         test_results = test_file,
         lesson = lesson,
-        course = course
+        course_id = course_id
     )
 
     return redirect('learn:learn_course', course_id)
@@ -178,7 +204,7 @@ def test_decision(request):
     with transaction.atomic():
         if action == "accept":
 
-            test.status = "sucseed"
+            test.status = "succeeded"
             lesson_progres.status = "finished"
             text = 'Добрый день, поздравялем со сдачей теста!'
             topic = 'Проверка теста'
@@ -216,13 +242,22 @@ def test_decision(request):
 @require_POST
 @login_required
 def complit_lesson(request,course_id,lesson_id):
-    lesson = get_object_or_404(Lesson, id = lesson_id)
     course = get_object_or_404(Course, id = course_id)
+
+    get_object_or_404(
+        CourseAccess,
+        user=request.user, 
+        course=course, 
+        status = CourseAccess.Status.ACTIVE
+        )
+
     lesson_progres = get_object_or_404(
         UserLessonProgress,
         user=request.user,
-        lesson=lesson,
+        lesson_id=lesson_id,
+        lesson__modules__courses = course_id
         )
+    
     user_progress = get_object_or_404(
         UserProgress,
         user=request.user,

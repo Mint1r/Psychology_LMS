@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from vkbot import services as bot
 from .models import Documents
 import logging
-from progress.models import UserProgress
+from access.models import CourseAccess
 from django.contrib import messages
 from django.conf import settings
 
@@ -37,7 +37,10 @@ def course(request,course_id):
     course = get_object_or_404(Course,id=course_id)
 
     if request.user.is_authenticated:
-        has_course = UserProgress.objects.filter(user = request.user, course = course).exists()
+        has_course = CourseAccess.objects.filter(
+            user = request.user, 
+            course = course,
+            status=CourseAccess.Status.ACTIVE).exists()
 
     data={
         'course':course,

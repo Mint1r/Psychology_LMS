@@ -10,25 +10,6 @@ from yookassa.domain.exceptions import ApiError, NotFoundError
 from django.urls import reverse
 from django.contrib.messages import get_messages
 
-# def test_create_smart_payment_sucseed():
-#     mock_payment = Mock()
-#     mock_payment.id = "test-payment-id"
-#     mock_payment.confirmation.confirmation_url = "http://test-payment"
-
-#     with patch("payment.payment.Payment", return_value=mock_payment) as mock_Payment:
-#         result = create_smart_payment(
-#             amount="1500.00",
-#             return_url="https://example.com/success",
-#             user_id="10",
-#             course_id="25",
-#             description="Оплата курса",
-#         )
-
-#     assert result["payment_id"] == "test-payment-id"
-#     assert result["confirmation_url"] == "http://test-payment"
-
-#     mock_Payment.assert_called_once()
-
 @pytest.mark.django_db
 def test_payment_smart_payment_error(client, user):
     client.force_login(user)

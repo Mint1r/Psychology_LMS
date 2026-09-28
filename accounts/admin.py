@@ -10,7 +10,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('username',)
 
     fieldsets = (
-        ('Главное', {'fields': ('username','phon_number','email')}),
+        ('Главное', {'fields': ('username','phone_number','email')}),
         ('Права доступа', {
             'fields': (
                 'is_active',

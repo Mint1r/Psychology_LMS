@@ -5,7 +5,7 @@ from django import forms
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ('username', 'phon_number','email')
+        fields = ('username', 'phone_number','email')
 
 from accounts.models import UserDocuments
 

@@ -14,6 +14,6 @@ django.setup()
 @pytest.fixture
 def user():
     return User.objects.create(
-        phon_number = '+79533677788',
+        phone_number = '+79533677788',
         email = 'mail@mail.ru'
         )

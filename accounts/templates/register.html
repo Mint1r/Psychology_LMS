@@ -34,9 +34,9 @@
                 </div>
 
                 <div class="input-group">
-                    <label for="phon">Номер телефона</label>
+                    <label for="phone">Номер телефона</label>
                     <div class="input-wrapper">
-                        <input type="text" id="phon" name="phon_number" placeholder="+7 (999) 999-99-99" value="{{ request.session.form_data.phon|default:'' }}" required>
+                        <input type="text" id="phone" name="phone_number" placeholder="+7 (999) 999-99-99" value="{{ request.session.form_data.phone|default:'' }}" required>
                         <i class="fas fa-phone field-icon"></i>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
                 const username = document.getElementById('username').value;
                 const password1 = document.getElementById('password1').value;
                 const password2 = document.getElementById('password2').value;
-                const phon_num = document.getElementById('phon').value;
+                const phone_num = document.getElementById('phone').value;
                 
                 if (username.length < 3) {
                     alert('Имя пользователя должно содержать не менее 3 символов');
@@ -189,7 +189,7 @@
                     return;
                 }
 
-                const validatedPhone = validatePhoneNumber(phon_num);
+                const validatedPhone = validatePhoneNumber(phone_num);
                 if (!validatedPhone) {
                     return;
                 }

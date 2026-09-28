@@ -54,8 +54,8 @@ class UserProgress(models.Model):
     )
     
     class Meta:
-        verbose_name = 'Доступ к курсам'
-        verbose_name_plural = 'Доступ к курсам'
+        verbose_name = 'Прогрес курса '
+        verbose_name_plural = 'Прогрес курса'
         ordering = ['-created_at']
 
         constraints = [
@@ -68,8 +68,10 @@ class UserProgress(models.Model):
     def percent(self):
         now = self.current_class -1
         all = self.course.amount()
-        if self.status == "finished":
-            return  100
+        if all == 0: 
+            return 0
+        elif self.status == "finished":
+            return 100
         return  int((now / all) * 100)
 
     def __str__(self):
@@ -137,7 +139,7 @@ class UserLessonProgress(models.Model):
     def __str__(self):
         return f'Пользователь {self.user.username}'
 
-class UserModulProgress(models.Model):
+class UserModuleProgress(models.Model):
     """Модель для хранения информации о модулях пройденых пользователем """
     
     user = models.ForeignKey(
@@ -147,10 +149,10 @@ class UserModulProgress(models.Model):
         verbose_name='Пользователь'
     )
 
-    modul = models.ForeignKey(
+    module = models.ForeignKey(
         Module, 
         on_delete=models.CASCADE,
-        related_name='modul_progress',
+        related_name='module_progress',
         verbose_name='Модуль'
     )
     
@@ -188,6 +190,13 @@ class UserModulProgress(models.Model):
         verbose_name = 'Прогресс модулей'
         verbose_name_plural = 'Прогресс модулей'
         ordering = ['-created_at']
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "module"],
+                name="unique_user_module_progress",
+            )
+        ]
 
     def __str__(self):
         return f'Пользователь {self.user.username}'

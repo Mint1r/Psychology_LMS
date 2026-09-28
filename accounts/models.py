@@ -19,7 +19,7 @@ class User(AbstractUser):
         help_text=('Указывает, что пользователь имеет все разрешения без их явного назначения.'),
     )
 
-    phon_number = models.CharField(
+    phone_number = models.CharField(
         max_length=64, 
         unique=True, 
         verbose_name=("Номер телефона")
@@ -128,34 +128,33 @@ class UserTests(models.Model):
     """Модель для хранения тестов пользователя"""
 
     CANCELED = 'canceled'
-    SUCSEED = 'sucseed'
+    SUCCEEDED = 'succeeded'
     PROCESSING = "processing"
 
     STATUS_CHOICES= [
         (CANCELED, 'canceled'),
-        (SUCSEED, 'sucseed'),
+        (SUCCEEDED, 'succeeded'),
         (PROCESSING, "processing")
     ]
     
     user = models.ForeignKey(
         User, 
         on_delete=models.CASCADE,
-        related_name='test_user',
+        related_name='tests',
         verbose_name='Пользователь',
-        unique=False
     )
 
     lesson = models.ForeignKey(
         Lesson, 
         on_delete=models.CASCADE,
-        related_name='test_lesson',
+        related_name='tests',
         verbose_name='Урок'
     )
 
     course = models.ForeignKey(
         Course, 
         on_delete=models.CASCADE,
-        related_name='test_course',
+        related_name='tests',
         verbose_name='Курс'
     )
     
@@ -174,7 +173,6 @@ class UserTests(models.Model):
     rejection_reason = models.CharField(
         verbose_name=("Причина отказа"),
         blank=True,
-        null=True,  
     )
 
     created_at = models.DateTimeField(

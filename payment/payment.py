@@ -1,10 +1,13 @@
 import uuid,logging
 from yookassa import Payment
 from yookassa.domain.exceptions import ApiError, NotFoundError
-from progress.models import UserProgress, UserModulProgress,UserLessonProgress
+from progress.models import UserProgress, UserModuleProgress,UserLessonProgress
+from access.models import CourseAccess
 from accounts.models import User
 from courses.models import Course
 from decimal import Decimal
+from django.db import transaction
+
 payment_logger = logging.getLogger("payments")
 
 class PaymentCreationError(Exception):
@@ -57,23 +60,35 @@ def create_smart_payment(
     except ApiError as e:
         payment_logger.warning(f"Ошибка ЮKassa: {e}")
         raise PaymentCreationError('Ошибка при создании платежа') from e
-
+    
+@transaction.atomic
 def set_course_access(user_id,course_id):
-    """ Дает пользователю доступ к курсу """
-    course = Course.objects.get(id=course_id)
-    user=User.objects.get(id = user_id)
-    course_modules = course.modules.all()
+    """ Создает объекты Progress и  CourseAccess"""
+    course = Course.objects.get(id = course_id)
+    user = User.objects.get(id = user_id)
+    course_modules = course.modules.prefetch_related('lessons').all()
+    lesson_progress = []
+    module_progress = []
     for module in course_modules:
-        lessons = module.lessons.all()
-        for lesson in lessons:
-            lesson_prog, created =UserLessonProgress.objects.get_or_create(lesson = lesson, user = user)
-            lesson_prog.save()
-        lesson_prog, created =UserModulProgress.objects.get_or_create(modul = module, user = user)
-        lesson_prog.save()
+        for lesson in module.lessons.all():
+            lesson_progress.append(UserLessonProgress(lesson = lesson, user = user))
+        module_progress.append(UserModuleProgress(module = module, user = user))
+
+    UserLessonProgress.objects.bulk_create(lesson_progress, ignore_conflicts=True)
+    UserModuleProgress.objects.bulk_create(module_progress, ignore_conflicts=True)
     
     UserProgress.objects.get_or_create(
-         user=user,
-         course = course,)
+        user=user,
+        course = course,)
+    
+    CourseAccess.objects.update_or_create(
+        user=user,
+        course=course,
+        defaults={
+            "status": CourseAccess.Status.ACTIVE,
+        },
+    )
+
     return True
 
 

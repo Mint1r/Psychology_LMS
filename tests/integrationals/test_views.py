@@ -3,7 +3,8 @@ from courses.models import Course, CourseModule, Module, ModuleLesson, Lesson
 from accounts.models import User, UserDocuments, UserTests
 from access.views import get_lessons_dict
 from django.urls import reverse
-from progress.models import UserLessonProgress, UserProgress, UserModulProgress
+from progress.models import UserLessonProgress, UserProgress, UserModuleProgress
+from access.models import CourseAccess
 from django.contrib.auth.models import Group
 from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import Mock, patch
@@ -69,7 +70,7 @@ def test_get_lessons_dict():
     )
 
     user_obj = User.objects.create(
-        phon_number = '+79533677788',
+        phone_number = '+79533677788',
         email = 'mail@mail.ru'
         )
 
@@ -78,6 +79,7 @@ def test_get_lessons_dict():
         course = course,
         current_class = 3
     )
+
 
     # Act
     result = get_lessons_dict(course, user_progress)
@@ -146,9 +148,9 @@ def test_learn_course_increments_progress(client, user):
         status="finished",
     )
 
-    UserModulProgress.objects.create(
+    UserModuleProgress.objects.create(
         user=user,
-        modul=module,
+        module=module,
     )
 
     UserLessonProgress.objects.create(
@@ -205,9 +207,9 @@ def test_learn_course_finish_course(client, user, django_capture_on_commit_callb
         status="finished",
     )
 
-    UserModulProgress.objects.create(
+    UserModuleProgress.objects.create(
         user=user,
-        modul=module,
+        module=module,
     )
 
     CourseModule.objects.create(
@@ -294,6 +296,10 @@ def test_learn_lesson(client, user):
         module=module,
         lesson=lesson2,
         order=2
+    )
+    CourseAccess.objects.create(
+        user = user,
+        course = course,
     )
 
     response = client.get(
@@ -463,13 +469,35 @@ def test_load_test(client, user):
         buffer.getvalue(),
         content_type="image/jpeg",
     )
+        
+    lesson1 = Lesson.objects.create(
+        title="Lesson 1"
+    )
+
+    module = Module.objects.create(
+        title="Python Module",
+    )
+
+    ModuleLesson.objects.create(
+        module=module,
+        lesson=lesson1,
+        order = 1
+    )
 
     course =Course.objects.create(
         title="Python Course"   
     )
-    
-    lesson1 = Lesson.objects.create(
-        title="Lesson 1"
+
+    CourseModule.objects.create(
+        module=module,  
+        course=course,
+        order = 1
+    )
+
+
+    CourseAccess.objects.create(
+        user = user,
+        course = course,
     )
 
 
@@ -487,15 +515,90 @@ def test_load_test(client, user):
     assert response.status_code == 302
 
 @pytest.mark.django_db
-def test_load_test_no_file(client, user):
+def test_load_test_lesson_not_in_course(client, user):
+    buffer = BytesIO()
     client.force_login(user)
+
+    Image.new("RGB", (100, 100), "white").save(
+        buffer,
+        format="JPEG",
+    )
+
+    image = SimpleUploadedFile(
+        "test.jpg",
+        buffer.getvalue(),
+        content_type="image/jpeg",
+    )
+        
+    lesson1 = Lesson.objects.create(
+        title="Lesson 1"
+    )
+
+    module = Module.objects.create(
+        title="Python Module",
+    )
 
     course =Course.objects.create(
         title="Python Course"   
     )
-    
+
+    CourseModule.objects.create(
+        module=module,  
+        course=course,
+        order = 1
+    )
+
+
+    CourseAccess.objects.create(
+        user = user,
+        course = course,
+    )
+
+
+    response = client.post(
+        reverse("learn:load_test",
+                kwargs={'course_id':course.id,
+                        'lesson_id':lesson1.id}),
+        {
+            "test_file": image,
+        },
+        HTTP_REFERER="/some-page/",
+    )
+    messages = list(get_messages(response.wsgi_request))
+    assert len(messages) == 0
+    assert response.status_code == 404
+
+@pytest.mark.django_db
+def test_load_test_no_file(client, user):
+    client.force_login(user)
+
     lesson1 = Lesson.objects.create(
         title="Lesson 1"
+    )
+
+    module = Module.objects.create(
+        title="Python Module",
+    )
+
+    ModuleLesson.objects.create(
+        module=module,
+        lesson=lesson1,
+        order = 1
+    )
+
+    course =Course.objects.create(
+        title="Python Course"   
+    )
+
+    CourseModule.objects.create(
+        module=module,  
+        course=course,
+        order = 1
+    )
+
+    CourseAccess.objects.create(
+        user = user,
+        course = course,
     )
 
     response = client.post(
@@ -561,9 +664,14 @@ def test_complite_lesson(client, user):
         status="started",
     )
 
-    UserModulProgress.objects.create(
+    UserModuleProgress.objects.create(
         user=user,
-        modul=module,
+        module=module,
+    )
+
+    CourseAccess.objects.create(
+        user = user,
+        course = course,
     )
 
     progress = UserProgress.objects.create(
@@ -645,9 +753,9 @@ def test_test_decision(client, user,django_capture_on_commit_callbacks):
         status="started",
     )
     
-    UserModulProgress.objects.create(
+    UserModuleProgress.objects.create(
         user=user,
-        modul=module,
+        module=module,
     )
 
     ModuleLesson.objects.create(
@@ -662,7 +770,7 @@ def test_test_decision(client, user,django_capture_on_commit_callbacks):
         order=2
     )
 
-    user_progress = UserProgress.objects.create(
+    UserProgress.objects.create(
         user=user,
         course=course,
         current_class=1,
@@ -689,5 +797,5 @@ def test_test_decision(client, user,django_capture_on_commit_callbacks):
     test.refresh_from_db()
     assert response.status_code == 302
     assert progress.status == "finished"
-    assert test.status == "sucseed"
+    assert test.status == "succeeded"
 

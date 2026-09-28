@@ -1,5 +1,5 @@
 from courses.models import CourseModule
-from progress.models import UserLessonProgress,UserModulProgress
+from progress.models import UserLessonProgress,UserModuleProgress
 from django.db import transaction
 from access.handlers import course_finish_aply
 
@@ -27,9 +27,9 @@ def module_progress_update(user,current_class,lessons_dict ):
     previous_module_lesson = lessons_dict[current_class - 2]['module_lesson']
 
     if current_module_lesson.module_id != previous_module_lesson.module_id:
-        module_progress = UserModulProgress.objects.get(
+        module_progress = UserModuleProgress.objects.get(
             user=user,
-            modul_id=previous_module_lesson.module_id
+            module_id=previous_module_lesson.module_id
         )
         module_progress.status = 'finished'
         module_progress.save(update_fields=["status", "updated_at"])
@@ -71,7 +71,7 @@ def update_user_course_progress(course, user_progress, user):
 
         course_finish_aply(
             user.username,
-            user.phon_number,
+            user.phone_number,
             course.title
         )
 
@@ -89,9 +89,9 @@ def update_user_course_progress(course, user_progress, user):
     while True:    
         lesson_id = lessons_dict[user_progress.current_class - 1]['lesson_id']
         current_lesson = lessons_dict[user_progress.current_class - 1]['module_lesson']
-        module_progress = UserModulProgress.objects.select_related('modul').get(
+        module_progress = UserModuleProgress.objects.select_related('module').get(
             user=user,
-            modul_id=current_lesson.module_id
+            module_id=current_lesson.module_id
         )
 
         if user_progress.current_class > all_course_lessons_cnt :
@@ -107,7 +107,7 @@ def update_user_course_progress(course, user_progress, user):
             break
 
         if module_progress.status == 'finished':
-            user_progress.current_class += module_progress.modul.lessons.count()
+            user_progress.current_class += module_progress.module.lessons.count()
             continue
             
         if lesson_progresses.get(lesson_id).status == 'finished':
